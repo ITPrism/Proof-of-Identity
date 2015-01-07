@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="password" type="password" class="input-xlarge"
+               label="COM_IDENTITYPROOF_PASSWORD"
+               filter="trim"
+               required="true"
+               />
+
+        <field name="file_id" type="hidden" filter="int" />
+
+    </fieldset>
+
+</form>

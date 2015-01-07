@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="title" type="text" class="input-xxlarge"
+               label="COM_IDENTITYPROOF_TITLE"
+               description="COM_IDENTITYPROOF_FIELD_TITLE_DESCRIPTION"
+               filter="trim"
+               required="true"
+               />
+
+        <field name="filename" type="text"
+               label="COM_IDENTITYPROOF_FILENAME"
+               description="COM_IDENTITYPROOF_FIELD_FILENAME_DESCRIPTION"
+               filter="trim"
+               />
+
+        <field name="state" type="list"
+               label="JSTATUS" description="COM_IDENTITYPROOF_FIELD_STATE_DESCRIPTION"
+               size="1" default="1">
+                <option value="1">COM_IDENTITYPROOF_REVIEWED</option>
+                <option value="0">COM_IDENTITYPROOF_PENDING</option>
+                <option value="-2">JTRASHED</option>
+        </field>
+
+        <field name="note" type="textarea" class="input-xxlarge"
+               label="COM_IDENTITYPROOF_NOTE"
+               description="COM_IDENTITYPROOF_FIELD_NOTE_DESCRIPTION"
+               />
+
+        <field name="record_date" type="text"
+               label="COM_IDENTITYPROOF_CREATED"
+               description="COM_IDENTITYPROOF_FIELD_CREATED_DESCRIPTION"
+               readonly="true"
+               />
+
+        <field name="user_id" type="user"
+               label="COM_IDENTITYPROOF_USER"
+               description="COM_IDENTITYPROOF_FIELD_USER_DESCRIPTION"
+                />
+
+        <field name="id"  type="text" class="readonly" label="JGLOBAL_FIELD_ID_LABEL"
+               description ="JGLOBAL_FIELD_ID_DESC" size="10" default="0"
+               readonly="true" />
+    </fieldset>
+
+</form>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="title" type="text" class="input-xxlarge"
+               label="COM_IDENTITYPROOF_TITLE"
+               description="COM_IDENTITYPROOF_TITLE_DESC"
+               filter="trim"
+               required="true"
+               />
+
+        <field name="file" type="file"
+               label="COM_IDENTITYPROOF_FILE"
+               description="COM_IDENTITYPROOF_FILE_DESC"
+               required="true"
+               />
+
+    </fieldset>
+
+</form>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_IDENTITYPROOF_VIEW_PROOF">
+        <message>
+            <![CDATA[COM_IDENTITYPROOF_VIEW_PROOF_DESC]]>
+        </message>
+    </layout>
+</metadata>

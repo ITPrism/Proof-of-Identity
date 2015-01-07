@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.3" method="upgrade">
+	<name>COM_IDENTITYPROOF</name>
+	<author>Todor Iliev</author>
+    <authorEmail>todor@itprism.com</authorEmail>
+    <authorUrl>http://itprism.com</authorUrl>
+    <copyright>Copyright (C) 2015 Todor Iliev ( ITPrism.com )</copyright>
+    <license>http://www.gnu.org/copyleft/gpl.html</license>
+    <version>1.0</version>
+    <creationDate>06 January, 2015</creationDate>
+    <description><![CDATA[
+	<p>Proof of Identity is a Joomla! extension that provides functionality to website administrators to receive proof of identity from their users.</p>
+	<p>Invest in the extension and help for its improvement. You can <a href="http://itprism.com/sponsorship" target="_blank">sponsor the extension via SMS or PayPal</a>.</p>
+	<p><a href="http://itprism.com/" target="_blank">Subscribe for the newsletter</a> to receive <strong>gifts</strong>, <strong>discount codes</strong>, information about <strong>updates</strong> and information about <strong>new ITPrism extensions</strong>.</p>
+	<p>Please, <a href="#" target="_blank">vote for the extension</a> on Joomla! Extensions Directory</p>
+	]]></description>
+
+	<install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.sql</file>
+        </sql>
+    </install>
+
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.sql</file>
+        </sql>
+    </uninstall>
+	
+	<update> 
+		<schemas>
+			<schemapath type="mysql">sql/updates</schemapath>
+		</schemas>
+	</update>
+	
+	<media destination="com_identityproof" folder="media">
+		<folder>css</folder>	
+		<folder>images</folder>
+		<folder>js</folder>		
+	</media>
+	
+	<!-- Site Main File Copy Section -->
+	<files folder="site">
+        <folder>controllers</folder>
+        <folder>helpers</folder>
+        <folder>language</folder>
+        <folder>models</folder>
+        <folder>views</folder>
+
+        <filename>controller.php</filename>
+		<filename>identityproof.php</filename>
+        <filename>router.php</filename>
+	</files>
+	
+	<administration>
+		<menu link="option=com_identityproof">COM_IDENTITYPROOF</menu>
+	
+		<files folder="admin">		    		
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>identityproof.php</filename>
+		</files>
+	</administration>
+</extension>

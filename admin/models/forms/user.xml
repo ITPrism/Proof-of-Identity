@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset>
+
+        <field name="name" type="text" class="readonly input-xxlarge"
+               label="COM_IDENTITYPROOF_NAME"
+               description="COM_IDENTITYPROOF_FIELD_NAME_DESCRIPTION"
+               readonly="true"
+               />
+
+        <field name="state" type="radio" class="btn-group"
+               label="JSTATUS" description="COM_IDENTITYPROOF_FIELD_USER_STATE_DESCRIPTION"
+               size="1" default="1">
+                <option value="0">COM_IDENTITYPROOF_NOT_VERIFIED</option>
+                <option value="1">COM_IDENTITYPROOF_VERIFIED</option>
+        </field>
+
+        <field name="id"  type="text" class="readonly" label="JGLOBAL_FIELD_ID_LABEL"
+               description ="JGLOBAL_FIELD_ID_DESC" size="10" default="0"
+               readonly="true" />
+
+    </fieldset>
+
+</form>
