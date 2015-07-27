@@ -105,8 +105,8 @@ class IdentityProofModelUser extends JModelAdmin
      */
     public function save($data)
     {
-        $id          = JArrayHelper::getValue($data, "id");
-        $state       = JArrayHelper::getValue($data, "state");
+        $id          = Joomla\Utilities\ArrayHelper::getValue($data, "id");
+        $state       = Joomla\Utilities\ArrayHelper::getValue($data, "state");
 
         // Load a record from the database
         $row = $this->getTable();
@@ -133,7 +133,7 @@ class IdentityProofModelUser extends JModelAdmin
             throw new InvalidArgumentException(JText::_("COM_IDENTITYPROOF_ERROR_INVALID_PARAMETER"));
         }
 
-        JArrayHelper::toInteger($pks);
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
 
         if (!$pks) {
             return;

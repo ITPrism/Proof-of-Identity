@@ -15,12 +15,12 @@ defined('_JEXEC') or die;
         <?php echo JHtml::_('grid.checkall'); ?>
     </th>
     <th width="1%" style="min-width: 55px" class="nowrap center">
-        <?php echo JHtml::_('grid.sort', 'JSTATUS', 'b.state', $this->listDirn, $this->listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'b.state', $this->listDirn, $this->listOrder); ?>
     </th>
     <th  class="title">
-        <?php echo JHtml::_('grid.sort', 'COM_IDENTITYPROOF_USER', 'a.name', $this->listDirn, $this->listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'COM_IDENTITYPROOF_NAME', 'a.name', $this->listDirn, $this->listOrder); ?>
     </th>
     <th width="3%" class="center nowrap hidden-phone">
-        <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $this->listDirn, $this->listOrder); ?>
+        <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $this->listDirn, $this->listOrder); ?>
     </th>
 </tr>

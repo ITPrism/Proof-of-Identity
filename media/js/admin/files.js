@@ -49,7 +49,7 @@ jQuery(document).ready(function() {
                 jQuery("#js-iproof-note-token").attr("name", response.data.token);
                 jQuery('#js-iproof-modal').modal('show');
             } else {
-                ITPrismUIHelper.displayMessageFailure(response.title, response.text);
+                PrismUIHelper.displayMessageFailure(response.title, response.text);
             }
 
         });
@@ -77,9 +77,9 @@ jQuery(document).ready(function() {
             jQuery('#js-iproof-modal').modal('hide');
 
             if (response.success) {
-                ITPrismUIHelper.displayMessageSuccess(response.title, response.text);
+                PrismUIHelper.displayMessageSuccess(response.title, response.text);
             } else {
-                ITPrismUIHelper.displayMessageFailure(response.title, response.text);
+                PrismUIHelper.displayMessageFailure(response.title, response.text);
             }
 
         });

@@ -21,9 +21,7 @@ class IdentityProofViewDownload extends JViewLegacy
         $fileId = $app->input->getInt("id");
         $userId = JFactory::getUser()->get("id");
 
-        jimport("identityproof.validator.file.owner");
-        $validator = new IdentityProofValidatorFileOwner(JFactory::getDbo(), $fileId, $userId);
-
+        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
         if (!$userId or !$validator->isValid()) {
             echo JText::_("COM_IDENTITYPROOF_ERROR_INVALID_REQUEST");
             JFactory::getApplication()->close(500);

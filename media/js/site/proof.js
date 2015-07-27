@@ -1,8 +1,25 @@
 jQuery(document).ready(function() {
     "use strict";
 
-	// Style file input.
-	jQuery('.fileupload').fileuploadstyle();
+    // Style file input
+    jQuery('#jform_file').fileinput({
+        showPreview: false,
+        showUpload: false,
+        browseClass: "btn btn-default",
+        browseLabel: Joomla.JText._('COM_IDENTITYPROOF_BROWSE'),
+        removeClass: "btn btn-danger",
+        removeLabel: Joomla.JText._('COM_IDENTITYPROOF_REMOVE'),
+        layoutTemplates: {
+            main1:
+            "<div class=\'input-group {class}\'>\n" +
+            "   <div class=\'input-group-btn\'>\n" +
+            "       {browse}\n" +
+            "       {remove}\n" +
+            "   </div>\n" +
+            "   {caption}\n" +
+            "</div>"
+        }
+    });
 
     // Get the file list jQuery element.
     var $fileList = jQuery("#js-ipfile-list");
@@ -31,9 +48,9 @@ jQuery(document).ready(function() {
 
                         if (response.success) {
                             jQuery("#js-ipfile" + response.data.file_id).remove();
-                            ITPrismUIHelper.displayMessageSuccess(response.title, response.text);
+                            PrismUIHelper.displayMessageSuccess(response.title, response.text);
                         } else {
-                            ITPrismUIHelper.displayMessageFailure(response.title, response.text);
+                            PrismUIHelper.displayMessageFailure(response.title, response.text);
                         }
 
                     }
@@ -91,7 +108,7 @@ jQuery(document).ready(function() {
         jQuery('#js-iproof-modal').modal('hide');
     });
 
-    // Set a "click" even for "Download" buttons.
+    // Set a "click" even for "Notification" buttons.
     $fileList.on("click", ".js-iproof-btn-note", function(event){
         event.preventDefault();
 
@@ -107,7 +124,7 @@ jQuery(document).ready(function() {
             }).done(function (response) {
 
                     if (!response.success) {
-                        ITPrismUIHelper.displayMessageFailure(response.title, response.text);
+                        PrismUIHelper.displayMessageFailure(response.title, response.text);
                     } else {
                         jQuery("#js-iproof-modal-note").find(".modal-body").text(response.data.note);
                     }

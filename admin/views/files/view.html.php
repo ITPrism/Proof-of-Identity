@@ -29,8 +29,8 @@ class IdentityProofViewFiles extends JViewLegacy
     protected $listOrder;
     protected $listDirn;
     protected $saveOrder;
-    protected $sortFields;
-    protected $saveOrderingUrl;
+
+    public $filterForm;
 
     protected $sidebar;
 
@@ -45,9 +45,6 @@ class IdentityProofViewFiles extends JViewLegacy
         $this->state      = $this->get('State');
         $this->items      = $this->get('Items');
         $this->pagination = $this->get('Pagination');
-
-        // Add submenu
-        IdentityProofHelper::addSubmenu($this->getName());
 
         // Prepare sorting data
         $this->prepareSorting();
@@ -70,17 +67,7 @@ class IdentityProofViewFiles extends JViewLegacy
         $this->listDirn  = $this->escape($this->state->get('list.direction'));
         $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') != 0) ? false : true;
 
-        if ($this->saveOrder) {
-            $this->saveOrderingUrl = 'index.php?option=' . $this->option . '&task=' . $this->getName() . '.saveOrderAjax&format=raw';
-            JHtml::_('sortablelist.sortable', $this->getName() . 'List', 'adminForm', strtolower($this->listDirn), $this->saveOrderingUrl);
-        }
-
-        $this->sortFields = array(
-            'b.name'             => JText::_('COM_IDENTITYPROOF_USER'),
-            'a.title'            => JText::_('COM_IDENTITYPROOF_TITLE'),
-            'a.filename'         => JText::_('COM_IDENTITYPROOF_FILENAME'),
-            'a.id'               => JText::_('JGRID_HEADING_ID')
-        );
+        $this->filterForm = $this->get('FilterForm');
     }
 
     /**
@@ -88,20 +75,7 @@ class IdentityProofViewFiles extends JViewLegacy
      */
     protected function addSidebar()
     {
-        JHtmlSidebar::setAction('index.php?option=' . $this->option . '&view=' . $this->getName());
-
-        $statesOptions = array(
-            JHtml::_("select.option", 0, JText::_("COM_IDENTITYPROOF_PENDING")),
-            JHtml::_("select.option", 1, JText::_("COM_IDENTITYPROOF_VERIFIED")),
-            JHtml::_("select.option", -2, JText::_("COM_IDENTITYPROOF_TRASHED")),
-        );
-
-        JHtmlSidebar::addFilter(
-            JText::_('JOPTION_SELECT_PUBLISHED'),
-            'filter_state',
-            JHtml::_('select.options', $statesOptions, 'value', 'text', $this->state->get('filter.state'), true)
-        );
-
+        IdentityProofHelper::addSubmenu($this->getName());
         $this->sidebar = JHtmlSidebar::render();
     }
 
@@ -145,9 +119,9 @@ class IdentityProofViewFiles extends JViewLegacy
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
 
-        JHtml::_("itprism.ui.pnotify");
-        JHtml::_('itprism.ui.joomla_helper');
-        JHtml::_('itprism.ui.joomla_list');
+        JHtml::_("prism.ui.pnotify");
+        JHtml::_('prism.ui.joomlaHelper');
+        JHtml::_('prism.ui.joomlaList');
 
         $this->document->addScript(JURI::root() . 'media/' . $this->option . '/js/admin/' . JString::strtolower($this->getName()) . '.js');
     }

@@ -12,7 +12,10 @@ defined('_JEXEC') or die;
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_identityproof'); ?>" method="post" name="ipDownloadForm" id="ipDownloadForm" autocomplete="off">
 
-    <?php echo $this->form->getControlGroup('password'); ?>
+    <div class="form-group">
+        <?php echo $this->form->getLabel('password'); ?>
+        <?php echo $this->form->getInput('password'); ?>
+    </div>
 
     <?php echo $this->form->getInput('file_id'); ?>
 

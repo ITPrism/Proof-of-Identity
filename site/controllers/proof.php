@@ -10,15 +10,13 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport('itprism.controller.form.frontend');
-
 /**
  * Proof controller
  *
  * @package     IdentityProof
  * @subpackage  Components
  */
-class IdentityProofControllerProof extends ITPrismControllerFormFrontend
+class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
 {
     /**
      * Method to get a model object, loading it if required.
@@ -56,7 +54,7 @@ class IdentityProofControllerProof extends ITPrismControllerFormFrontend
 
         // Get the file.
         $file = $this->input->files->get('jform', array(), 'array');
-        $file = JArrayHelper::getValue($file, "file");
+        $file = Joomla\Utilities\ArrayHelper::getValue($file, "file");
 
         $data["file"] = $file;
 
@@ -87,12 +85,10 @@ class IdentityProofControllerProof extends ITPrismControllerFormFrontend
 
             // Upload image
             if (!empty($file['name'])) {
-
                 $file = $model->uploadFile($file);
                 if (!empty($file)) {
                     $validData["file"] = $file;
                 }
-
             }
 
             $model->save($validData);

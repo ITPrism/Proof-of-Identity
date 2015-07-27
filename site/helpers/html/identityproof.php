@@ -11,7 +11,9 @@
 defined('_JEXEC') or die;
 
 /**
- * ProofOfIdentity Html Helper
+ * ProofOfIdentity Html Helper.
+ * The methods generates HTML code based on Bootstrap 3
+ * because they are used on front-end.
  *
  * @package        ProofOfIdentity
  * @subpackage     Components
@@ -29,9 +31,9 @@ abstract class JHtmlIdentityProof
      *
      * @return string
      */
-    public static function state($value, $iconPending = "icon-time", $iconOk = "icon-ok-circle", $iconWarning = "icon-trash")
+    public static function state($value, $iconPending = "glyphicon-time", $iconOk = "glyphicon-ok-circle", $iconWarning = "icon-trash")
     {
-        $html = '<button class="btn btn-mini hasTooltip" title="{TITLE}"><i class="{ICON}"></i></button>';
+        $html = '<button class="btn btn-default btn-xs hasTooltip" title="{TITLE}"><span class="glyphicon {ICON}"></span></button>';
 
         switch ($value) {
 
@@ -65,8 +67,8 @@ abstract class JHtmlIdentityProof
     public static function note($fileId)
     {
         $html = '
-        <button class="btn btn-mini hasTooltip js-iproof-btn-note" data-file-id="'.(int)$fileId.'" title="'.JText::_("COM_IDENTITYPROOF_TOOLTIP_NOTE_BUTTON").'">
-            <i class="icon-envelope"></i>
+        <button class="btn btn-default btn-xs hasTooltip js-iproof-btn-note" data-file-id="'.(int)$fileId.'" title="'.JText::_("COM_IDENTITYPROOF_TOOLTIP_NOTE_BUTTON").'">
+            <span class="glyphicon glyphicon-envelope"></span>
         </button>
         ';
 

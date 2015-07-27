@@ -76,13 +76,12 @@ class IdentityProofViewProof extends JViewLegacy
         $this->files      = $model->getFiles($userId);
 
         // Create a user record if it does not exist.
-        jimport("identityproof.user");
-        $this->user = new IdentityProofUser(JFactory::getDbo());
+        $this->user = new IdentityProof\User(JFactory::getDbo());
         $this->user->load($userId);
 
         if (!$this->user->getId()) {
             $this->user->bind(array("id" => $userId));
-            $this->user->createUser();
+            $this->user->store();
         }
 
         $this->prepareDocument();
@@ -120,13 +119,14 @@ class IdentityProofViewProof extends JViewLegacy
 
         // Include the translation of the confirmation question.
         JText::script('COM_IDENTITYPROOF_DELETE_QUESTION');
+        JText::script('COM_IDENTITYPROOF_BROWSE');
+        JText::script('COM_IDENTITYPROOF_REMOVE');
 
         JHtml::_('bootstrap.tooltip');
-        JHtml::_('behavior.core');
-        JHtml::_('itprism.ui.bootstrap_fileuploadstyle');
-        JHtml::_('itprism.ui.bootstrap_modal');
-        JHtml::_("itprism.ui.pnotify");
-        JHtml::_('itprism.ui.joomla_helper');
+        JHtml::_('jquery.framework');
+        JHtml::_('prism.ui.bootstrap3FileInput');
+        JHtml::_("prism.ui.pnotify");
+        JHtml::_('prism.ui.joomlaHelper');
 
         $this->document->addScript('media/' . $this->option . '/js/site/proof.js');
     }

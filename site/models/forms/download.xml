@@ -2,7 +2,7 @@
 <form>
     <fieldset>
 
-        <field name="password" type="password" class="input-xlarge"
+        <field name="password" type="password" class="form-control"
                label="COM_IDENTITYPROOF_PASSWORD"
                filter="trim"
                required="true"

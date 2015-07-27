@@ -101,12 +101,12 @@ class IdentityProofModelFile extends JModelAdmin
      */
     public function save($data)
     {
-        $id          = JArrayHelper::getValue($data, "id");
-        $title       = JArrayHelper::getValue($data, "title");
-        $filename    = JArrayHelper::getValue($data, "filename");
-        $state       = JArrayHelper::getValue($data, "state");
-        $note        = JArrayHelper::getValue($data, "note");
-        $userId      = JArrayHelper::getValue($data, "user_id");
+        $id          = Joomla\Utilities\ArrayHelper::getValue($data, "id");
+        $title       = Joomla\Utilities\ArrayHelper::getValue($data, "title");
+        $filename    = Joomla\Utilities\ArrayHelper::getValue($data, "filename");
+        $state       = Joomla\Utilities\ArrayHelper::getValue($data, "state");
+        $note        = Joomla\Utilities\ArrayHelper::getValue($data, "note");
+        $userId      = Joomla\Utilities\ArrayHelper::getValue($data, "user_id");
 
         if (!$note) {
             $note = null;
@@ -136,7 +136,7 @@ class IdentityProofModelFile extends JModelAdmin
     public function changeState(&$pks, $value)
     {
         $pks = (array)$pks;
-        JArrayHelper::toInteger($pks);
+        Joomla\Utilities\ArrayHelper::toInteger($pks);
 
         if (!$pks) {
             return;

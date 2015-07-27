@@ -37,15 +37,15 @@ defined('_JEXEC') or die;
             <tbody>
             <tr>
                 <td><?php echo JText::_("COM_IDENTITYPROOF_INSTALLED_VERSION"); ?></td>
-                <td><?php echo $this->version->getMediumVersion(); ?></td>
+                <td><?php echo $this->version->getShortVersion(); ?></td>
             </tr>
             <tr>
                 <td><?php echo JText::_("COM_IDENTITYPROOF_RELEASE_DATE"); ?></td>
                 <td><?php echo $this->version->releaseDate ?></td>
             </tr>
             <tr>
-                <td><?php echo JText::_("COM_IDENTITYPROOF_ITPRISM_LIBRARY_VERSION"); ?></td>
-                <td><?php echo $this->itprismVersion; ?></td>
+                <td><?php echo JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_VERSION"); ?></td>
+                <td><?php echo $this->prismVersion; ?></td>
             </tr>
             <tr>
                 <td><?php echo JText::_("COM_IDENTITYPROOF_COPYRIGHT"); ?></td>
@@ -57,5 +57,9 @@ defined('_JEXEC') or die;
             </tr>
             </tbody>
         </table>
+
+        <?php if (!empty($this->prismVersionLowerMessage)) {?>
+            <p class="alert alert-warning"><i class="icon-warning"></i> <?php echo $this->prismVersionLowerMessage; ?></p>
+        <?php } ?>
     </div>
 </div>

@@ -57,8 +57,7 @@ class IdentityProofControllerFile extends JControllerLegacy
         try {
 
             // Load file data.
-            jimport("identityproof.file");
-            $file = new IdentityProofFile(JFactory::getDbo());
+            $file = new IdentityProof\File(JFactory::getDbo());
             $file->load($fileId);
 
             // Prepare keys.
@@ -104,8 +103,7 @@ class IdentityProofControllerFile extends JControllerLegacy
     public function getFormToken()
     {
         // Create response object
-        jimport("itprism.response.json");
-        $response = new ITPrismResponseJson();
+        $response = new Prism\Response\Json();
 
         $response
             ->setTitle(JText::_('COM_IDENTITYPROOF_SUCCESS'))

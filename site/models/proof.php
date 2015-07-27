@@ -22,7 +22,7 @@ class IdentityProofModelProof extends JModelForm
      * @param   string $prefix A prefix for the table class name. Optional.
      * @param   array  $config Configuration array for model. Optional.
      *
-     * @return  JTable  A database object
+     * @return  IdentityProofTableFile  A database object
      * @since   1.6
      */
     public function getTable($type = 'File', $prefix = 'IdentityProofTable', $config = array())
@@ -129,17 +129,16 @@ class IdentityProofModelProof extends JModelForm
         $app = JFactory::getApplication();
         /** @var $app JApplicationSite */
 
-        $uploadedFile = JArrayHelper::getValue($tmpFile, 'tmp_name');
-        $uploadedName = JArrayHelper::getValue($tmpFile, 'name');
-        $errorCode    = JArrayHelper::getValue($tmpFile, 'error');
+        $uploadedFile = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'tmp_name');
+        $uploadedName = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'name');
+        $errorCode    = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'error');
 
         // Load parameters.
         $params     = JComponentHelper::getParams($this->option);
         /** @var  $params Joomla\Registry\Registry */
 
         // Generate a folder name.
-        jimport("itprism.string");
-        $generatedName = new ITPrismString();
+        $generatedName = new Prism\String();
         $generatedName->generateRandomString();
 
         $destFolder = JPath::clean($app->get("tmp_path") . DIRECTORY_SEPARATOR . (string)$generatedName);
@@ -156,13 +155,7 @@ class IdentityProofModelProof extends JModelForm
             throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
         }
 
-        jimport("itprism.file");
-        jimport("itprism.file.uploader.local");
-        jimport("itprism.file.validator.size");
-        jimport("itprism.file.validator.type");
-        jimport("itprism.file.validator.server");
-
-        $file = new ITPrismFile();
+        $file = new Prism\File\File();
 
         // Prepare size validator.
         $KB            = 1024 * 1024;
@@ -170,13 +163,13 @@ class IdentityProofModelProof extends JModelForm
         $uploadMaxSize = $params->get("max_size") * $KB;
 
         // Prepare file size validator
-        $sizeValidator = new ITPrismFileValidatorSize($fileSize, $uploadMaxSize);
+        $sizeValidator = new Prism\File\Validator\Size($fileSize, $uploadMaxSize);
 
         // Prepare server validator.
-        $serverValidator = new ITPrismFileValidatorServer($errorCode, array(UPLOAD_ERR_NO_FILE));
+        $serverValidator = new Prism\File\Validator\Server($errorCode, array(UPLOAD_ERR_NO_FILE));
 
         // Prepare image validator.
-        $typeValidator = new ITPrismFileValidatorType($uploadedFile, $uploadedName);
+        $typeValidator = new Prism\File\Validator\Type($uploadedFile, $uploadedName);
 
         // Get allowed mime types from media manager options
         $mimeTypes = explode(",", $params->get("legal_types"));
@@ -204,13 +197,13 @@ class IdentityProofModelProof extends JModelForm
         $ext = JFile::makeSafe(JFile::getExt($tmpFile['name']));
 
         // Generate a file name.
-        $generatedName = new ITPrismString();
+        $generatedName = new Prism\String();
         $generatedName->generateRandomString();
 
         $tmpDestFile = JPath::clean($destFolder . DIRECTORY_SEPARATOR . $generatedName . "." . $ext);
 
         // Prepare uploader object.
-        $uploader = new ITPrismFileUploaderLocal($uploadedFile);
+        $uploader = new Prism\File\Uploader\Local($uploadedFile);
         $uploader->setDestination($tmpDestFile);
 
         // Upload temporary file
@@ -246,8 +239,8 @@ class IdentityProofModelProof extends JModelForm
      */
     public function save($data)
     {
-        $title     = JArrayHelper::getValue($data, "title");
-        $file      = JArrayHelper::getValue($data, "file");
+        $title     = Joomla\Utilities\ArrayHelper::getValue($data, "title");
+        $file      = Joomla\Utilities\ArrayHelper::getValue($data, "file");
         $filename  = basename($file);
 
         $userId    = JFactory::getUser()->get("id");
@@ -296,6 +289,9 @@ class IdentityProofModelProof extends JModelForm
         // Load a record from the database
         $row = $this->getTable();
 
+        // Uploaded file will be always NEW.
+        $isNew = true;
+
         $row->set("title", $title);
         $row->set("filename", $filename);
         $row->set("private", (!isset($keysData["private"])) ? null : $keysData["private"]);
@@ -305,20 +301,22 @@ class IdentityProofModelProof extends JModelForm
 
         $row->store(true);
 
+        // Trigger the event onContentAfterSave.
+        $this->triggerEventAfterSave($row, "uploading", $isNew);
+
         return $row->get("id");
     }
 
     protected function generateKeys()
     {
         // Generate a password that will be used to encrypt the file.
-        jimport("itprism.string");
         $length   = rand(16, 32);
-        $password = new ITPrismString();
+        $password = new Prism\String();
         $password->generateRandomString($length);
 
         // Generate a salt.
         $length   = rand(16, 32);
-        $salt = new ITPrismString();
+        $salt = new Prism\String();
         $salt->generateRandomString($length);
 
         $options = array(
@@ -333,5 +331,35 @@ class IdentityProofModelProof extends JModelForm
             "private"  => $key->private,
             "public"   => $key->public
         );
+    }
+
+    /**
+     * This method executes the event onContentAfterSave.
+     *
+     * @param IdentityProofTableFile $table
+     * @param string $context
+     * @param bool $isNew
+     *
+     * @throws Exception
+     */
+    protected function triggerEventAfterSave($table, $context, $isNew = false)
+    {
+        // Get properties
+        $file = $table->getProperties();
+        $file = Joomla\Utilities\ArrayHelper::toObject($file);
+
+        // Generate context
+        $context = $this->option . '.' . $context;
+
+        // Include the content plugins for the change of state event.
+        $dispatcher = JEventDispatcher::getInstance();
+        JPluginHelper::importPlugin('content');
+
+        // Trigger the onContentAfterSave event.
+        $results = $dispatcher->trigger("onContentAfterSave", array($context, &$file, $isNew));
+
+        if (in_array(false, $results, true)) {
+            throw new RuntimeException(JText::_("COM_IDENTITYPROOF_ERROR_DURING_UPLOADING_FILE_PROCESS"));
+        }
     }
 }

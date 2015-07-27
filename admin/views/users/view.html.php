@@ -29,8 +29,8 @@ class IdentityProofViewUsers extends JViewLegacy
     protected $listOrder;
     protected $listDirn;
     protected $saveOrder;
-    protected $sortFields;
-    protected $saveOrderingUrl;
+
+    public $filterForm;
 
     protected $sidebar;
 
@@ -60,9 +60,6 @@ class IdentityProofViewUsers extends JViewLegacy
             $model->createUsers($newUsers);
         }
 
-        // Add submenu
-        IdentityProofHelper::addSubmenu($this->getName());
-
         // Prepare sorting data
         $this->prepareSorting();
 
@@ -84,16 +81,7 @@ class IdentityProofViewUsers extends JViewLegacy
         $this->listDirn  = $this->escape($this->state->get('list.direction'));
         $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') != 0) ? false : true;
 
-        if ($this->saveOrder) {
-            $this->saveOrderingUrl = 'index.php?option=' . $this->option . '&task=' . $this->getName() . '.saveOrderAjax&format=raw';
-            JHtml::_('sortablelist.sortable', $this->getName() . 'List', 'adminForm', strtolower($this->listDirn), $this->saveOrderingUrl);
-        }
-
-        $this->sortFields = array(
-            'a.id'      => JText::_('JGRID_HEADING_ID'),
-            'a.name'    => JText::_('COM_IDENTITYPROOF_NAME'),
-            'b.state'   => JText::_('JSTATUS')
-        );
+        $this->filterForm    = $this->get('FilterForm');
     }
 
     /**
@@ -101,19 +89,7 @@ class IdentityProofViewUsers extends JViewLegacy
      */
     protected function addSidebar()
     {
-        JHtmlSidebar::setAction('index.php?option=' . $this->option . '&view=' . $this->getName());
-
-        $statesOptions = array(
-            JHtml::_("select.option", 0, JText::_("COM_IDENTITYPROOF_NOT_VERIFIED")),
-            JHtml::_("select.option", 1, JText::_("COM_IDENTITYPROOF_VERIFIED"))
-        );
-
-        JHtmlSidebar::addFilter(
-            JText::_('JOPTION_SELECT_PUBLISHED'),
-            'filter_state',
-            JHtml::_('select.options', $statesOptions, 'value', 'text', $this->state->get('filter.state'), true)
-        );
-
+        IdentityProofHelper::addSubmenu($this->getName());
         $this->sidebar = JHtmlSidebar::render();
     }
 
@@ -147,7 +123,5 @@ class IdentityProofViewUsers extends JViewLegacy
 
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
-
-        JHtml::_('itprism.ui.joomla_list');
     }
 }

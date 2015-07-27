@@ -10,25 +10,20 @@
 // No direct access
 defined('_JEXEC') or die;
 
-jimport('itprism.controller.form.backend');
-
 /**
  * Proof of Identity user controller class.
  *
  * @package      ProofOfIdentity
  * @subpackage   Components
  */
-class IdentityProofControllerUser extends ITPrismControllerFormBackend
+class IdentityProofControllerUser extends Prism\Controller\Form\Backend
 {
-    /**
-     * Save an item
-     */
     public function save($key = null, $urlVar = null)
     {
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $data   = $this->input->post->get('jform', array(), 'array');
-        $itemId = JArrayHelper::getValue($data, "id");
+        $itemId = Joomla\Utilities\ArrayHelper::getValue($data, "id");
 
         $redirectOptions = array(
             "task" => $this->getTask(),
@@ -39,7 +34,7 @@ class IdentityProofControllerUser extends ITPrismControllerFormBackend
         /** @var $model IdentityProofModelUser */
 
         $form = $model->getForm($data, false);
-        /** @var $form JForm * */
+        /** @var $form JForm */
 
         if (!$form) {
             throw new Exception(JText::_("COM_IDENTITYPROOF_ERROR_FORM_CANNOT_BE_LOADED"));

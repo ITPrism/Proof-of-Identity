@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<extension type="package" version="3.3" method="upgrade">
+<extension type="package" version="3.4" method="upgrade">
 	<name>Proof of Identity Package</name>
 	<packagename>identityproof</packagename>
 	<author>Todor Iliev</author>
@@ -7,16 +7,15 @@
     <authorUrl>http://itprism.com</authorUrl>
     <copyright>Copyright (C) 2015 Todor Iliev ( ITPrism.com )</copyright>
     <license>http://www.gnu.org/copyleft/gpl.html</license>
-    <version>1.0</version>
-    <creationDate>06 January, 2015</creationDate>
+    <version>2.0</version>
+    <creationDate>26 July, 2015</creationDate>
     <url>http://itprism.com</url>
 	<packager>Todor Iliev</packager>
 	<packagerurl>http://itprism.com</packagerurl>
 	<description><![CDATA[
 	<p>Proof of Identity is a Joomla! extension that provides functionality to website administrators to receive proof of identity from their users.</p>
-	<p>Invest in the extension and help for its improvement. You can <a href="http://itprism.com/sponsorship" target="_blank">sponsor the extension via SMS or PayPal</a>.</p>
 	<p><a href="http://itprism.com/" target="_blank">Subscribe for the newsletter</a> to receive <strong>gifts</strong>, <strong>discount codes</strong>, information about <strong>updates</strong> and information about <strong>new ITPrism extensions</strong>.</p>
-	<p>Please, <a href="#" target="_blank">vote for the extension</a> on Joomla! Extensions Directory</p>
+	<p>Please, <a href="http://extensions.joomla.org/extensions/extension/clients-a-communities/user-management/proof-of-identity" target="_blank">vote for the extension</a> on Joomla! Extensions Directory</p>
 	]]></description>
 	
 	<files folder="packages">
@@ -24,7 +23,13 @@
 		<file type="library" 	id="lib_identityproof" >lib_identityproof.zip</file>
 
 		<file type="plugin" 	id="identityproof" group="user">plg_user_identityproof.zip</file>
+        <file type="plugin" 	id="identityproofadminmail" group="content">plg_content_identityproofadminmail.zip</file>
+        <file type="plugin" 	id="identityproofusermail"  group="content">plg_content_identityproofusermail.zip</file>
 	</files>
 
 	<scriptfile>install.php</scriptfile>
+
+    <updateservers>
+        <server type="extension" priority="1" name="Proof of Identity Package ( from CDN )">http://cdn.itprism.com/updates/identityproof.xml</server>
+    </updateservers>
 </extension>

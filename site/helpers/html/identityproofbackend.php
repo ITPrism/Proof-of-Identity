@@ -11,7 +11,9 @@
 defined('_JEXEC') or die;
 
 /**
- * IdentityProof Html Helper
+ * ProofOfIdentity Html Helper.
+ * The methods generates HTML code based on Bootstrap 2
+ * because they are used on front-end.
  *
  * @package        ProofOfIdentity
  * @subpackage     Component

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
     <fieldset>
-
-        <field name="title" type="text" class="input-xxlarge"
+        <field name="title" type="text" class="form-control"
                label="COM_IDENTITYPROOF_TITLE"
                description="COM_IDENTITYPROOF_TITLE_DESC"
                filter="trim"
@@ -14,7 +13,6 @@
                description="COM_IDENTITYPROOF_FILE_DESC"
                required="true"
                />
-
     </fieldset>
 
 </form>

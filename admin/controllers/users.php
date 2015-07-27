@@ -10,8 +10,6 @@
 // No direct access
 defined('_JEXEC') or die;
 
-jimport('itprism.controller.admin');
-
 /**
  * Proof of Identity users controller class.
  *
@@ -19,7 +17,7 @@ jimport('itprism.controller.admin');
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerUsers extends ITPrismControllerAdmin
+class IdentityProofControllerUsers extends Prism\Controller\Admin
 {
     public function __construct($config = array())
     {
@@ -51,14 +49,14 @@ class IdentityProofControllerUsers extends ITPrismControllerAdmin
         );
 
         $task  = $this->getTask();
-        $value = JArrayHelper::getValue($data, $task, 0, 'int');
+        $value = Joomla\Utilities\ArrayHelper::getValue($data, $task, 0, 'int');
 
         $redirectOptions = array(
             "view" => "users"
         );
 
         // Make sure the item ids are integers
-        JArrayHelper::toInteger($cid);
+        Joomla\Utilities\ArrayHelper::toInteger($cid);
         if (empty($cid)) {
             $this->displayNotice(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), $redirectOptions);
 

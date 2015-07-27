@@ -18,7 +18,8 @@ class IdentityProofViewDashboard extends JViewLegacy
     public $document;
 
     protected $version;
-    protected $itprismVersion;
+    protected $prismVersion;
+    protected $prismVersionLowerMessage;
     protected $uri;
     protected $uriHTTPS;
 
@@ -34,15 +35,18 @@ class IdentityProofViewDashboard extends JViewLegacy
 
     public function display($tpl = null)
     {
-        $this->version = new IdentityProofVersion();
+        $this->version = new IdentityProof\Version();
 
-        // Load ITPrism library version
-        jimport("itprism.version");
-        if (!class_exists("ITPrismVersion")) {
-            $this->itprismVersion = JText::_("COM_IDENTITYPROOF_ITPRISM_LIBRARY_DOWNLOAD");
+        // Load Prism library version
+        if (!class_exists("Prism\\Version")) {
+            $this->prismVersion = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_DOWNLOAD");
         } else {
-            $itprismVersion       = new ITPrismVersion();
-            $this->itprismVersion = $itprismVersion->getShortVersion();
+            $prismVersion       = new Prism\Version();
+            $this->prismVersion = $prismVersion->getShortVersion();
+
+            if (version_compare($this->prismVersion, $this->version->requiredPrismVersion, "<")) {
+                $this->prismVersionLowerMessage = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_LOWER_VERSION");
+            }
         }
 
         // Get URI

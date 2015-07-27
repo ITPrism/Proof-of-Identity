@@ -10,8 +10,8 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport("itprism.init");
-jimport("identityproof.init");
+jimport("Prism.init");
+jimport("IdentityProof.init");
 
 $controller = JControllerLEgacy::getInstance('IdentityProof');
 $controller->execute(JFactory::getApplication()->input->getCmd('task'));

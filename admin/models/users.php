@@ -99,7 +99,7 @@ class IdentityProofModelUsers extends JModelList
         $query->select(
             $this->getState(
                 'list.select',
-                'a.id, a.name, ' .
+                'a.id, a.name, a.username, a.email, ' .
                 'b.id as user_id, b.state'
             )
         );

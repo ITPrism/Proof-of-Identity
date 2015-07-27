@@ -44,20 +44,18 @@ class IdentityProofControllerFile extends JControllerLegacy
         $app = JFactory::getApplication();
 
         // Create response object
-        jimport("itprism.response.json");
-        $response = new ITPrismResponseJson();
+        $response = new Prism\Response\Json();
 
         $fileId = $this->input->post->get("id");
 
         $userId = JFactory::getUser()->get("id");
 
         // Create validator object.
-        jimport("identityproof.validator.file.owner");
-        $validator = new IdentityProofValidatorFileOwner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
 
         if (!$userId) {
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_NOT_LOG_IN'))
                 ->failure();
 
@@ -67,7 +65,7 @@ class IdentityProofControllerFile extends JControllerLegacy
 
         if (!$validator->isValid()) {
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'))
                 ->failure();
 
@@ -87,7 +85,7 @@ class IdentityProofControllerFile extends JControllerLegacy
 
             JLog::add($e->getMessage());
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'))
                 ->failure();
 
@@ -118,7 +116,7 @@ class IdentityProofControllerFile extends JControllerLegacy
         
         $data   = $this->input->post->get("jform", array(), "array");
 
-        $fileId = JArrayHelper::getValue($data, "file_id", 0, "int");
+        $fileId = Joomla\Utilities\ArrayHelper::getValue($data, "file_id", 0, "int");
         $userId = $user->get("id");
 
         // Validate the user.
@@ -128,15 +126,14 @@ class IdentityProofControllerFile extends JControllerLegacy
         }
 
         // Validate the item owner.
-        jimport("identityproof.validator.file.owner");
-        $validator = new IdentityProofValidatorFileOwner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
         if (!$validator->isValid()) {
             $this->setRedirect(JRoute::_(IdentityProofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
             return;
         }
 
         // Validate the password.
-        $password = JArrayHelper::getValue($data, "password", null, "string");
+        $password = Joomla\Utilities\ArrayHelper::getValue($data, "password", null, "string");
         $match    = JUserHelper::verifyPassword($password, $user->get("password"), $userId);
         if (!$match) {
             $this->setRedirect(JRoute::_(IdentityProofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
@@ -149,8 +146,7 @@ class IdentityProofControllerFile extends JControllerLegacy
         try {
 
             // Load file data.
-            jimport("identityproof.file");
-            $file = new IdentityProofFile(JFactory::getDbo());
+            $file = new IdentityProof\File(JFactory::getDbo());
 
             $keys = array(
                 "id" => $fileId,
@@ -206,20 +202,18 @@ class IdentityProofControllerFile extends JControllerLegacy
         $app = JFactory::getApplication();
 
         // Create response object
-        jimport("itprism.response.json");
-        $response = new ITPrismResponseJson();
+        $response = new Prism\Response\Json();
 
         $fileId = $this->input->get->get("id");
 
         $userId = JFactory::getUser()->get("id");
 
         // Create validator object.
-        jimport("identityproof.validator.file.owner");
-        $validator = new IdentityProofValidatorFileOwner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
 
         if (!$userId) {
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_NOT_LOG_IN'))
                 ->failure();
 
@@ -229,7 +223,7 @@ class IdentityProofControllerFile extends JControllerLegacy
 
         if (!$validator->isValid()) {
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'))
                 ->failure();
 

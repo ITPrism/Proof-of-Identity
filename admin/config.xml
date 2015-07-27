@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <fieldset name="basic" label="COM_IDENTITYPROOF_BASIC">
-        <field name="files_path" type="text" default="{FILES_PATH}" label="COM_IDENTITYPROOF_FILES_DIRECTORY" description="COM_IDENTITYPROOF_FILES_DIRECTORY_DESC" class="input-xxlarge"/>
+        <field name="files_path" type="text" default="D:\xampp\htdocs\crowdfunding2\ip29a024eed6e" label="COM_IDENTITYPROOF_FILES_DIRECTORY" description="COM_IDENTITYPROOF_FILES_DIRECTORY_DESC" class="input-xxlarge"/>
         
         <field name="legal_extensions" type="text" default="jpg, jpeg, png, pdf"
                label="COM_IDENTITYPROOF_LEGAL_EXTENSIONS" description="COM_IDENTITYPROOF_LEGAL_EXTENSIONS_DESC"
@@ -35,6 +35,7 @@
             <option value="0">JNO</option>
             <option value="1">JYES</option>
         </field>
+        <field name="administrator_id" type="user" label="COM_IDENTITYPROOF_ADMINISTRATOR" description="COM_IDENTITYPROOF_ADMINISTRATOR_DESC" />
     </fieldset>
     
 </config>

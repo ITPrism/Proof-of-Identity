@@ -10,8 +10,8 @@
 // no direct access
 defined('_JEXEC') or die;
 
-jimport("itprism.init");
-jimport("identityproof.init");
+jimport("Prism.init");
+jimport("IdentityProof.init");
 
 // Get an instance of the controller prefixed by HelloWorld
 $controller = JControllerLegacy::getInstance("IdentityProof");

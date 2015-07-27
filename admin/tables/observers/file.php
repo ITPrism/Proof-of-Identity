@@ -45,7 +45,7 @@ class IdentityProofObserverFile extends JTableObserver
     {
         $observer = new self($observableObject);
 
-        $observer->typeAliasPattern = JArrayHelper::getValue($params, 'typeAlias');
+        $observer->typeAliasPattern = Joomla\Utilities\ArrayHelper::getValue($params, 'typeAlias');
 
         return $observer;
     }

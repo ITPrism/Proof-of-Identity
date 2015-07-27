@@ -47,8 +47,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
         $app = JFactory::getApplication();
 
         // Create response object
-        jimport("itprism.response.json");
-        $response = new ITPrismResponseJson();
+        $response = new Prism\Response\Json();
 
         $fileId = $this->input->post->get("id");
         $note   = $this->input->post->getString("note");
@@ -94,8 +93,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
         $app = JFactory::getApplication();
 
         // Create response object
-        jimport("itprism.response.json");
-        $response = new ITPrismResponseJson();
+        $response = new Prism\Response\Json();
 
         $fileId = $this->input->get->get("id");
 

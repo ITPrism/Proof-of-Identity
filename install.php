@@ -85,6 +85,8 @@ class pkg_identityproofInstallerScript
 
         jimport("joomla.filesystem.file");
         jimport("joomla.filesystem.folder");
+        jimport('Prism.init');
+        jimport('IdentityProof.init');
 
         if (!$params->get("files_path")) {
 
@@ -166,7 +168,7 @@ class pkg_identityproofInstallerScript
         }
         IdentityProofInstallHelper::addRow($title, $result, $info);
 
-        // Display result about verification FileInfo
+        // Display result about verification PHP Version.
         $title = JText::_("COM_IDENTITYPROOF_PHP_VERSION");
         $info  = "";
         if (version_compare(PHP_VERSION, '5.3.0') < 0) {
@@ -176,12 +178,11 @@ class pkg_identityproofInstallerScript
         }
         IdentityProofInstallHelper::addRow($title, $result, $info);
 
-        // Display result about verification of installed ITPrism Library
-        jimport("itprism.version");
-        $title = JText::_("COM_IDENTITYPROOF_ITPRISM_LIBRARY");
+        // Display result about verification of installed Prism Library
+        $title = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY");
         $info  = "";
-        if (!class_exists("ITPrismVersion")) {
-            $info   = JText::_("COM_IDENTITYPROOF_ITPRISM_LIBRARY_DOWNLOAD");
+        if (!class_exists("Prism\\Version")) {
+            $info   = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_DOWNLOAD");
             $result = array("type" => "important", "text" => JText::_("JNO"));
         } else {
             $result = array("type" => "success", "text" => JText::_("JYES"));
@@ -207,9 +208,17 @@ class pkg_identityproofInstallerScript
 
         echo JText::sprintf("COM_IDENTITYPROOF_MESSAGE_REVIEW_SAVE_SETTINGS", JRoute::_("index.php?option=com_identityproof"));
 
-        jimport("itprism.version");
-        if (!class_exists("ITPrismVersion")) {
-            echo JText::_("COM_IDENTITYPROOF_MESSAGE_INSTALL_ITPRISM_LIBRARY");
+        if (!class_exists("Prism\\Version")) {
+            echo JText::_("COM_IDENTITYPROOF_MESSAGE_INSTALL_PRISM_LIBRARY");
+        } else {
+
+            if (class_exists("IdentityProof\\Version")) {
+                $prismVersion     = new Prism\Version();
+                $componentVersion = new IdentityProof\Version();
+                if (version_compare($prismVersion->getShortVersion(), $componentVersion->requiredPrismVersion)) {
+                    echo JText::_("COM_IDENTITYPROOF_MESSAGE_INSTALL_PRISM_LIBRARY");
+                }
+            }
         }
     }
 }
