@@ -215,7 +215,7 @@ class pkg_identityproofInstallerScript
             if (class_exists("IdentityProof\\Version")) {
                 $prismVersion     = new Prism\Version();
                 $componentVersion = new IdentityProof\Version();
-                if (version_compare($prismVersion->getShortVersion(), $componentVersion->requiredPrismVersion)) {
+                if (version_compare($prismVersion->getShortVersion(), $componentVersion->requiredPrismVersion, "<")) {
                     echo JText::_("COM_IDENTITYPROOF_MESSAGE_INSTALL_PRISM_LIBRARY");
                 }
             }

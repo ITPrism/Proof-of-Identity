@@ -38,7 +38,7 @@ class Version
      *
      * @var integer
      */
-    public $devLevel = '0';
+    public $devLevel = '1';
 
     /**
      * Release Type
@@ -59,7 +59,7 @@ class Version
      *
      * @var string
      */
-    public $releaseDate = '26 July, 2015';
+    public $releaseDate = '05 August, 2015';
 
     /**
      * License
@@ -80,14 +80,14 @@ class Version
      *
      * @var string
      */
-    public $url = '<a href="#" target="_blank">Proof of Identity</a>';
+    public $url = '<a href="http://itprism.com/free-joomla-extensions/ecommerce-gamification/verifying-user-profile" target="_blank">Proof of Identity</a>';
 
     /**
      * Backlink
      *
      * @var string
      */
-    public $backlink = '<div style="width:100%; text-align: left; font-size: xx-small; margin-top: 10px;"><a href="#" target="_blank">Joomla! Proof of Identity</a></div>';
+    public $backlink = '<div style="width:100%; text-align: left; font-size: xx-small; margin-top: 10px;"><a href="http://itprism.com/free-joomla-extensions/ecommerce-gamification/verifying-user-profile" target="_blank">Joomla! Proof of Identity</a></div>';
 
     /**
      * Developer

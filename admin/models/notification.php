@@ -113,6 +113,22 @@ class IdentityProofModelNotification extends JModelAdmin
 
         $db->setQuery($query);
         $db->execute();
+
+        // Trigger leaving notice event
+        if (strcmp($note, "NULL") != 0) {
+            $context = $this->option . '.' . $this->name;
+
+            // Include the content plugins for the change of state event.
+            JPluginHelper::importPlugin('content');
+
+            // Trigger the onContentLeaveNote event.
+            $dispatcher = JEventDispatcher::getInstance();
+            $result     = $dispatcher->trigger("onContentLeaveNote", array($context, $id));
+
+            if (in_array(false, $result, true)) {
+                throw new RuntimeException(JText::_("COM_IDENTITYPROOF_ERROR_TRIGGERING_PLUGIN"));
+            }
+        }
     }
 
     /**

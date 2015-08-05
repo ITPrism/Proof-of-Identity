@@ -70,7 +70,7 @@ class plgContentIdentityProofAdminMail extends JPlugin
         // when user upload a file.
         $emailId = $this->params->get("send_when_upload", 0);
         if (!$emailId) {
-            JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_EMAIL_TEMPLATE", $this->name));
+            JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_EMAIL_TEMPLATE", $this->name), JLog::DEBUG);
             return null;
         }
 
@@ -81,7 +81,7 @@ class plgContentIdentityProofAdminMail extends JPlugin
 
             // Check for error.
             if ($return !== true) {
-                JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_FILE", $this->name));
+                JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_FILE", $this->name), JLog::ERROR);
                 return null;
             }
         }

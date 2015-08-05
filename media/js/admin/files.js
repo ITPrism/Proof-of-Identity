@@ -8,24 +8,7 @@ jQuery(document).ready(function() {
 
         jQuery("#js-iproof-download-id").val(jQuery(this).data("file-id"))
 
-        var fields = {
-            task: "file.getFormToken",
-            format: "raw"
-        };
-
-        jQuery.ajax({
-            url: "index.php?option=com_identityproof",
-            type: "get",
-            data: fields,
-            dataType: "text json"
-        }).done(function (response) {
-
-            if (response.success) {
-                jQuery("#js-iproof-download-token").attr("name", response.data.token);
-                jQuery("#js-iproof-download-form").submit();
-            }
-
-        });
+        jQuery("#js-iproof-download-form").submit();
 
     });
 
@@ -71,8 +54,17 @@ jQuery(document).ready(function() {
             url: "index.php?option=com_identityproof",
             type: "post",
             dataType: "text json",
-            data: fields
+            data: fields,
+            beforeSend: function() {
+                jQuery("#js-iproof-loader").show();
+                jQuery('#js-iproof-btn-modal-submit').prop("disabled", true);
+                jQuery('#js-iproof-btn-modal-cancel').prop("disabled", true);
+            }
         }).done(function (response) {
+
+            jQuery("#js-iproof-loader").hide();
+            jQuery('#js-iproof-btn-modal-submit').prop("disabled", false);
+            jQuery('#js-iproof-btn-modal-cancel').prop("disabled", false);
 
             jQuery('#js-iproof-modal').modal('hide');
 
@@ -81,6 +73,7 @@ jQuery(document).ready(function() {
             } else {
                 PrismUIHelper.displayMessageFailure(response.title, response.text);
             }
+
 
         });
 

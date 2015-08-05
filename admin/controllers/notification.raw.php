@@ -55,7 +55,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
 
         if (!$userId or !$fileId) {
             $response
-                ->setTitle(JText::_('COM_IDENTITYPROOF_FAIL'))
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_SYSTEM'))
                 ->failure();
 
@@ -70,6 +70,17 @@ class IdentityProofControllerNotification extends JControllerLegacy
             /** @var $model IdentityProofModelNotification */
 
             $model->leaveNotice($fileId, $note);
+
+        } catch (RuntimeException $e) {
+            JLog::add($e->getMessage());
+
+            $response
+                ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
+                ->setText($e->getMessage())
+                ->failure();
+
+            echo $response;
+            $app->close();
 
         } catch (Exception $e) {
             JLog::add($e->getMessage());

@@ -99,18 +99,4 @@ class IdentityProofControllerFile extends JControllerLegacy
         echo $output;
         $app->close();
     }
-
-    public function getFormToken()
-    {
-        // Create response object
-        $response = new Prism\Response\Json();
-
-        $response
-            ->setTitle(JText::_('COM_IDENTITYPROOF_SUCCESS'))
-            ->setData(array("token" => JSession::getFormToken()))
-            ->success();
-
-        echo $response;
-        JFactory::getApplication()->close();
-    }
 }

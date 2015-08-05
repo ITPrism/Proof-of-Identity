@@ -28,7 +28,7 @@ defined('_JEXEC') or die;
             <a href="javascript: void(0);" class="btn js-iproof-download-btn hasTooltip" data-file-id="<?php echo $item->id;?>" title="<?php echo JText::_("COM_IDENTITYPROOF_DOWNLOAD"); ?>">
                 <i class="icon-download"></i>
             </a>
-            <a href="javascript: void(0);" class="btn js-iproof-note-btn hasTooltip" data-file-id="<?php echo $item->id;?>" title="<?php echo JText::_("COM_IDENTITYPROOF_LEAVE_NOTE"); ?>">
+            <a href="javascript: void(0);" class="btn js-iproof-note-btn hasTooltip" data-file-id="<?php echo $item->id;?>" title="<?php echo (!empty($item->note)) ? JText::_("COM_IDENTITYPROOF_EDIT_NOTE") : JText::_("COM_IDENTITYPROOF_LEAVE_NOTE"); ?>">
                 <i class="<?php echo !empty($item->note) ? "icon-edit" : "icon-pencil";?>"></i>
             </a>
         </td>

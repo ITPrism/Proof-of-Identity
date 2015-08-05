@@ -43,8 +43,11 @@ defined('_JEXEC') or die;
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-primary" id="js-iproof-btn-modal-submit"><?php echo JText::_("COM_IDENTITYPROOF_SUBMIT");?></a>
-        <a href="#" class="btn" id="js-iproof-btn-modal-cancel"><?php echo JText::_("COM_IDENTITYPROOF_CANCEL");?></a>
+        <img src="../../media/com_identityproof/images/ajax-loader.gif" width="16" height="16" style="display: none;" id="js-iproof-loader"/>
+        <button class="btn btn-primary" id="js-iproof-btn-modal-submit">
+            <i class="icon-ok"></i> <?php echo JText::_("COM_IDENTITYPROOF_SUBMIT");?></button>
+        <button class="btn" id="js-iproof-btn-modal-cancel">
+            <i class="icon-cancel"></i> <?php echo JText::_("COM_IDENTITYPROOF_CANCEL");?></button>
     </div>
 </div>
 

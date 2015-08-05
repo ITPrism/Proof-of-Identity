@@ -16,5 +16,5 @@ defined('_JEXEC') or die;
     <input type="hidden" name="format" value="raw" />
     <input type="hidden" name="task" value="file.download" />
 
-    <input type="hidden" value="1" name="" id="js-iproof-download-token">
+    <?php echo JHtml::_('form.token'); ?>
 </form>

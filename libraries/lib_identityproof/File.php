@@ -191,6 +191,8 @@ class File extends Prism\Database\Table
      * ...
      * }
      * </code>
+     *
+     * @return int
      */
     public function getId()
     {
@@ -208,10 +210,31 @@ class File extends Prism\Database\Table
      *
      * $state = $file->getState();
      * </code>
+     *
+     * @return int File state - 0 = not reviewed; 1 = reviewed; -2 = trashed;
      */
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Return the note left by the administrator.
+     *
+     * <code>
+     * $fileId  = 1;
+     *
+     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file->load($fileId);
+     *
+     * $note = $file->getNote();
+     * </code>
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return (string)$this->note;
     }
 
     /**
@@ -225,6 +248,8 @@ class File extends Prism\Database\Table
      *
      * $title = $file->getTitle();
      * </code>
+     *
+     * @return string
      */
     public function getTitle()
     {
@@ -280,10 +305,31 @@ class File extends Prism\Database\Table
      *
      * $filename = $file->getFilename();
      * </code>
+     *
+     * @return string
      */
     public function getFilename()
     {
         return (string)$this->filename;
+    }
+
+    /**
+     * Return user ID.
+     *
+     * <code>
+     * $fileId  = 1;
+     *
+     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file->load($fileId);
+     *
+     * $userId = $file->getUserId();
+     * </code>
+     *
+     * @return int
+     */
+    public function getUserId()
+    {
+        return (int)$this->user_id;
     }
 
     /**
