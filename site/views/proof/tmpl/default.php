@@ -4,7 +4,7 @@
  * @subpackage   Component
  * @author       Todor Iliev
  * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
@@ -88,9 +88,9 @@ defined('_JEXEC') or die;
             <thead>
             <tr>
                 <th><?php echo JText::_("COM_IDENTITYPROOF_TITLE");?></th>
-                <th class="span2 center hidden-xs"><?php echo JText::_("COM_IDENTITYPROOF_DATE");?></th>
-                <th class="span2 center"><?php echo JText::_("COM_IDENTITYPROOF_STATE");?></th>
-                <th class="span3 hidden-xs">&nbsp;</th>
+                <th class="col-md-2 center hidden-xs"><?php echo JText::_("COM_IDENTITYPROOF_DATE");?></th>
+                <th class="col-md-2 center"><?php echo JText::_("COM_IDENTITYPROOF_STATE");?></th>
+                <th class="col-md-4 hidden-xs">&nbsp;</th>
             </tr>
             </thead>
             <tbody id="js-ipfile-list">
