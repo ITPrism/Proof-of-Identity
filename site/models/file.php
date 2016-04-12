@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * Get a list of items
  */
-class IdentityProofModelFile extends JModelLegacy
+class IdentityproofModelFile extends JModelLegacy
 {
     public function remove($fileId, $userId)
     {
@@ -22,19 +22,19 @@ class IdentityProofModelFile extends JModelLegacy
 
         // Remove the key file.
         $query
-            ->select("a.filename")
-            ->from($db->quoteName("#__identityproof_files", "a"))
-            ->where("a.id = ". (int)$fileId)
-            ->where("a.user_id = ". (int)$userId);
+            ->select('a.filename')
+            ->from($db->quoteName('#__identityproof_files', 'a'))
+            ->where('a.id = '. (int)$fileId)
+            ->where('a.user_id = '. (int)$userId);
 
         $db->setQuery($query, 0, 1);
         $result = $db->loadResult();
 
-        if (!empty($result)) {
+        if ($result !== null and $result !== '') {
             $params = JComponentHelper::getParams($this->option);
             /** @var  $params Joomla\Registry\Registry */
 
-            $file = JPath::clean($params->get("files_path") .DIRECTORY_SEPARATOR. $result);
+            $file = JPath::clean($params->get('files_path') .DIRECTORY_SEPARATOR. $result);
 
             if (JFile::exists($file)) {
                 JFile::delete($file);
@@ -44,9 +44,9 @@ class IdentityProofModelFile extends JModelLegacy
         // Remove the record.
         $query  = $db->getQuery(true);
         $query
-            ->delete($db->quoteName("#__identityproof_files"))
-            ->where($db->quoteName("id") ." = ". (int)$fileId)
-            ->where($db->quoteName("user_id") ." = ". (int)$userId);
+            ->delete($db->quoteName('#__identityproof_files'))
+            ->where($db->quoteName('id') .' = '. (int)$fileId)
+            ->where($db->quoteName('user_id') .' = '. (int)$userId);
 
         $db->setQuery($query);
         $db->execute();
@@ -67,17 +67,13 @@ class IdentityProofModelFile extends JModelLegacy
 
         // Remove the key file.
         $query
-            ->select("a.note")
-            ->from($db->quoteName("#__identityproof_files", "a"))
-            ->where("a.id = ". (int)$fileId)
-            ->where("a.user_id = ". (int)$userId);
+            ->select('a.note')
+            ->from($db->quoteName('#__identityproof_files', 'a'))
+            ->where('a.id = '. (int)$fileId)
+            ->where('a.user_id = '. (int)$userId);
 
         $db->setQuery($query, 0, 1);
-        $result = $db->loadResult();
-
-        if (!$result) {
-            $result = "";
-        }
+        $result = (string)$db->loadResult();
 
         return $result;
     }

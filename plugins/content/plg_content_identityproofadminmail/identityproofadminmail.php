@@ -3,8 +3,8 @@
  * @package         IdentityProof
  * @subpackage      Plugins
  * @author          Todor Iliev
- * @copyright       Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license         http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @copyright       Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @license         GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
@@ -28,12 +28,12 @@ class plgContentIdentityProofAdminMail extends JPlugin
      */
     public $params;
 
-    protected $name = "Content - Proof of Identity Admin Mail";
+    protected $name = 'Content - Proof of Identity Admin Mail';
 
     public function init()
     {
         jimport('Prism.init');
-        jimport("EmailTemplates.init");
+        jimport('Emailtemplates.init');
 
         $this->loadLanguage();
     }
@@ -44,15 +44,15 @@ class plgContentIdentityProofAdminMail extends JPlugin
      * If I return NULL, an message will not be displayed in the browser.
      * If I return FALSE, an error message will be displayed in the browser.
      *
-     * @param string  $context
-     * @param object  $file
-     * @param boolean $isNew
+     * @param string   $context
+     * @param stdClass $file
+     * @param boolean  $isNew
      *
      * @return null|boolean
      */
     public function onContentAfterSave($context, &$file, $isNew)
     {
-        if (strcmp("com_identityproof.uploading", $context) != 0) {
+        if (strcmp('com_identityproof.uploading', $context) !== 0) {
             return null;
         }
 
@@ -68,20 +68,20 @@ class plgContentIdentityProofAdminMail extends JPlugin
 
         // Check for enabled option for sending mail
         // when user upload a file.
-        $emailId = $this->params->get("send_when_upload", 0);
+        $emailId = $this->params->get('send_when_upload', 0);
         if (!$emailId) {
-            JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_EMAIL_TEMPLATE", $this->name), JLog::DEBUG);
+            JLog::add(JText::sprintf('PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_EMAIL_TEMPLATE', $this->name), JLog::DEBUG);
             return null;
         }
 
-        if (!empty($file->id) and $isNew) {
+        if ($file->id > 0 and $isNew) {
 
             // Send email to the administrator.
             $return = $this->sendMail($file, $emailId);
 
             // Check for error.
             if ($return !== true) {
-                JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_FILE", $this->name), JLog::ERROR);
+                JLog::add(JText::sprintf('PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_INVALID_FILE', $this->name), JLog::ERROR);
                 return null;
             }
         }
@@ -103,41 +103,41 @@ class plgContentIdentityProofAdminMail extends JPlugin
 
         // Get website
         $uri     = JUri::getInstance();
-        $website = $uri->toString(array("scheme", "host"));
+        $website = $uri->toString(array('scheme', 'host'));
 
-        $emailMode = $this->params->get("email_mode", "plain");
+        $emailMode = $this->params->get('email_mode', 'plain');
 
         // Prepare data for parsing
         $data = array(
-            "site_name"  => $app->get("sitename"),
-            "site_url"   => JUri::root(),
-            "item_title" => $file->title,
-            "item_url"   => $website . "/administrator/index.php?option=com_identityproof&view=files&filter_search=id:".(int)$file->id,
-            "user_name"  => $fileOwner->get("name"),
-            "user_email" => $fileOwner->get("email")
+            'site_name'  => $app->get('sitename'),
+            'site_url'   => JUri::root(),
+            'item_title' => $file->title,
+            'item_url'   => $website . '/administrator/index.php?option=com_identityproof&view=files&filter_search=id:'.(int)$file->id,
+            'user_name'  => $fileOwner->get('name'),
+            'user_email' => $fileOwner->get('email')
         );
 
-        $email = new EmailTemplates\Email();
+        $email = new Emailtemplates\Email();
         $email->setDb(JFactory::getDbo());
         $email->load($emailId);
 
         if (!$email->getSenderName()) {
-            $email->setSenderName($app->get("fromname"));
+            $email->setSenderName($app->get('fromname'));
         }
         if (!$email->getSenderEmail()) {
-            $email->setSenderEmail($app->get("mailfrom"));
+            $email->setSenderEmail($app->get('mailfrom'));
         }
 
         // Prepare recipient data.
-        $componentParams = JComponentHelper::getParams("com_identityproof");
+        $componentParams = JComponentHelper::getParams('com_identityproof');
         /** @var  $componentParams Joomla\Registry\Registry */
 
-        $recipientId = $componentParams->get("administrator_id");
-        if (!empty($recipientId)) {
+        $recipientId = (int)$componentParams->get('administrator_id', 0);
+        if ($recipientId > 0) {
             $recipient     = JFactory::getUser($recipientId);
-            $recipientMail = $recipient->get("email");
+            $recipientMail = $recipient->get('email');
         } else {
-            $recipientMail = $app->get("mailfrom");
+            $recipientMail = $app->get('mailfrom');
         }
 
         $email->parse($data);
@@ -145,7 +145,7 @@ class plgContentIdentityProofAdminMail extends JPlugin
         $body    = $email->getBody($emailMode);
 
         $mailer = JFactory::getMailer();
-        if (strcmp("html", $emailMode) == 0) { // Send as HTML message
+        if (strcmp('html', $emailMode) === 0) { // Send as HTML message
             $result = $mailer->sendMail($email->getSenderEmail(), $email->getSenderName(), $recipientMail, $subject, $body, Prism\Constants::MAIL_MODE_HTML);
         } else { // Send as plain text.
             $result = $mailer->sendMail($email->getSenderEmail(), $email->getSenderName(), $recipientMail, $subject, $body, Prism\Constants::MAIL_MODE_PLAIN);
@@ -153,7 +153,7 @@ class plgContentIdentityProofAdminMail extends JPlugin
 
         // Log the error.
         if ($result !== true) {
-            JLog::add(JText::sprintf("PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_SEND_MAIL", $this->name));
+            JLog::add(JText::sprintf('PLG_CONTENT_IDENTITYPROOFADMINMAIL_ERROR_SEND_MAIL', $this->name));
             return false;
         }
 

@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 defined('JPATH_PLATFORM') or die;
@@ -20,7 +20,7 @@ defined('JPATH_PLATFORM') or die;
  * @link         http://docs.joomla.org/JTableObserver
  * @since        3.1.2
  */
-class IdentityProofObserverFile extends JTableObserver
+class IdentityproofObserverFile extends JTableObserver
 {
     /**
      * The pattern for this table's TypeAlias
@@ -37,7 +37,7 @@ class IdentityProofObserverFile extends JTableObserver
      * @param   JObservableInterface $observableObject The subject object to be observed
      * @param   array                $params           ( 'typeAlias' => $typeAlias )
      *
-     * @return  IdentityProofObserverFile
+     * @return  IdentityproofObserverFile
      *
      * @since   3.1.2
      */
@@ -62,12 +62,12 @@ class IdentityProofObserverFile extends JTableObserver
      */
     public function onAfterDelete($pk)
     {
-        $params = JComponentHelper::getParams("com_identityproof");
+        $params = JComponentHelper::getParams('com_identityproof');
         /** @var  $params Joomla\Registry\Registry */
 
         // Remove the file.
-        jimport("joomla.filesystem.file");
-        $file = JPath::clean($params->get("files_path") . DIRECTORY_SEPARATOR . $this->table->get("filename"));
+        jimport('joomla.filesystem.file');
+        $file = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $this->table->get('filename'));
 
         if (JFile::exists($file)) {
             JFile::delete($file);

@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofViewDashboard extends JViewLegacy
+class IdentityproofViewDashboard extends JViewLegacy
 {
     /**
      * @var JDocumentHtml
@@ -27,25 +27,21 @@ class IdentityProofViewDashboard extends JViewLegacy
 
     protected $sidebar;
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        $this->option = JFactory::getApplication()->input->get("option");
-    }
-
     public function display($tpl = null)
     {
-        $this->version = new IdentityProof\Version();
+        $this->option = JFactory::getApplication()->input->get('option');
+        
+        $this->version = new Identityproof\Version();
 
         // Load Prism library version
-        if (!class_exists("Prism\\Version")) {
-            $this->prismVersion = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_DOWNLOAD");
+        if (!class_exists('Prism\\Version')) {
+            $this->prismVersion = JText::_('COM_IDENTITYPROOF_PRISM_LIBRARY_DOWNLOAD');
         } else {
             $prismVersion       = new Prism\Version();
             $this->prismVersion = $prismVersion->getShortVersion();
 
-            if (version_compare($this->prismVersion, $this->version->requiredPrismVersion, "<")) {
-                $this->prismVersionLowerMessage = JText::_("COM_IDENTITYPROOF_PRISM_LIBRARY_LOWER_VERSION");
+            if (version_compare($this->prismVersion, $this->version->requiredPrismVersion, '<')) {
+                $this->prismVersionLowerMessage = JText::_('COM_IDENTITYPROOF_PRISM_LIBRARY_LOWER_VERSION');
             }
         }
 
@@ -54,11 +50,11 @@ class IdentityProofViewDashboard extends JViewLegacy
         $uriCloned        = clone($this->uri);
 
         // Generate HTTPS URI.
-        $uriCloned->setScheme("https");
+        $uriCloned->setScheme('https');
         $this->uriHTTPS   = $uriCloned->toString();
 
         // Add submenu
-        IdentityProofHelper::addSubmenu($this->getName());
+        IdentityproofHelper::addSubmenu($this->getName());
 
         $this->addToolbar();
         $this->addSidebar();
@@ -82,7 +78,7 @@ class IdentityProofViewDashboard extends JViewLegacy
      */
     protected function addToolbar()
     {
-        JToolBarHelper::title(JText::_("COM_IDENTITYPROOF_DASHBOARD"));
+        JToolBarHelper::title(JText::_('COM_IDENTITYPROOF_DASHBOARD'));
 
         JToolbarHelper::preferences('com_identityproof');
         JToolbarHelper::divider();

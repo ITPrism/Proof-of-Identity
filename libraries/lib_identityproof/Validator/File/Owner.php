@@ -1,13 +1,13 @@
 <?php
 /**
- * @package      IdentityProof\Files
+ * @package      Identityproof\Files
  * @subpackage   Validators
  * @author       Todor Iliev
  * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      GNU General Public License version 3 or later; see LICENSE.txt
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
-namespace IdentityProof\Validator\File;
+namespace Identityproof\Validator\File;
 
 use Prism;
 
@@ -16,7 +16,7 @@ defined('JPATH_BASE') or die;
 /**
  * This class provides functionality for validation file owner.
  *
- * @package      IdentityProof\Files
+ * @package      Identityproof\Files
  * @subpackage   Validators
  */
 class Owner implements Prism\Validator\ValidatorInterface
@@ -32,7 +32,7 @@ class Owner implements Prism\Validator\ValidatorInterface
      * $fileId = 1;
      * $userId = 2;
      *
-     * $owner = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
+     * $owner = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
      * </code>
      *
      * @param \JDatabaseDriver $db     Database object.
@@ -53,7 +53,7 @@ class Owner implements Prism\Validator\ValidatorInterface
      * $fileId = 1;
      * $userId = 2;
      *
-     * $owner = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
+     * $owner = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
      * if(!$owner->isValid()) {
      * ......
      * }
@@ -66,10 +66,10 @@ class Owner implements Prism\Validator\ValidatorInterface
         $query = $this->db->getQuery(true);
 
         $query
-            ->select("COUNT(*)")
-            ->from($this->db->quoteName("#__identityproof_files", "a"))
-            ->where("a.id = " . (int)$this->fileId)
-            ->where("a.user_id = " . (int)$this->userId);
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__identityproof_files', 'a'))
+            ->where('a.id = ' . (int)$this->fileId)
+            ->where('a.user_id = ' . (int)$this->userId);
 
         $this->db->setQuery($query, 0, 1);
         $result = $this->db->loadResult();

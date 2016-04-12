@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
             <div class="control-group ">
                 <div class="control-label">
                     <label class="required" for="iproof_form_note" id="iproof_form_note-lbl">
-                        <?php echo JText::_("COM_IDENTITYPROOF_NOTICE"); ?><span class="star">&nbsp;*</span>
+                        <?php echo JText::_('COM_IDENTITYPROOF_NOTICE'); ?><span class="star">&nbsp;*</span>
                     </label>
                 </div>
                 <div class="controls">
@@ -33,7 +33,7 @@ defined('_JEXEC') or die;
 
             <div class="alert alert-info">
                 <i class="icon-info"></i>
-                <?php echo JText::_("COM_IDENTITYPROOF_LEAVE_NOTE_INFO"); ?>
+                <?php echo JText::_('COM_IDENTITYPROOF_LEAVE_NOTE_INFO'); ?>
             </div>
 
             <input type="hidden" name="id" value="" id="js-iproof-note-file-id"/>
@@ -45,9 +45,9 @@ defined('_JEXEC') or die;
     <div class="modal-footer">
         <img src="../../media/com_identityproof/images/ajax-loader.gif" width="16" height="16" style="display: none;" id="js-iproof-loader"/>
         <button class="btn btn-primary" id="js-iproof-btn-modal-submit">
-            <i class="icon-ok"></i> <?php echo JText::_("COM_IDENTITYPROOF_SUBMIT");?></button>
+            <i class="icon-ok"></i> <?php echo JText::_('COM_IDENTITYPROOF_SUBMIT');?></button>
         <button class="btn" id="js-iproof-btn-modal-cancel">
-            <i class="icon-cancel"></i> <?php echo JText::_("COM_IDENTITYPROOF_CANCEL");?></button>
+            <i class="icon-cancel"></i> <?php echo JText::_('COM_IDENTITYPROOF_CANCEL');?></button>
     </div>
 </div>
 

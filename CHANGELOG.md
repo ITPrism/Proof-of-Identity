@@ -1,5 +1,12 @@
-Proof Of Identity Release Notes
+Proof Of Identity Changelog
 ===============================
+
+###v2.2
+* Replaced Glyphicons with Font Awesome.
+* It was done to be compatible with Prism Library 1.9.
+* Improved code quality.
+* Added plugin events on onDisplayVerification, onVerify, onRemove.
+* Fixed an issue with functionality to download the files.
 
 ###v2.1
 * Fixed the plugin "Content - Proof of Identity User Mail".

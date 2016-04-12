@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofViewFiles extends JViewLegacy
+class IdentityproofViewFiles extends JViewLegacy
 {
     /**
      * @var JDocumentHtml
@@ -31,17 +31,14 @@ class IdentityProofViewFiles extends JViewLegacy
     protected $saveOrder;
 
     public $filterForm;
+    public $activeFilters;
 
     protected $sidebar;
 
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        $this->option = JFactory::getApplication()->input->get("option");
-    }
-
     public function display($tpl = null)
     {
+        $this->option     = JFactory::getApplication()->input->get('option');
+
         $this->state      = $this->get('State');
         $this->items      = $this->get('Items');
         $this->pagination = $this->get('Pagination');
@@ -65,9 +62,10 @@ class IdentityProofViewFiles extends JViewLegacy
         // Prepare filters
         $this->listOrder = $this->escape($this->state->get('list.ordering'));
         $this->listDirn  = $this->escape($this->state->get('list.direction'));
-        $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') != 0) ? false : true;
+        $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') === 0);
 
         $this->filterForm = $this->get('FilterForm');
+        $this->activeFilters = $this->get('ActiveFilters');
     }
 
     /**
@@ -75,7 +73,7 @@ class IdentityProofViewFiles extends JViewLegacy
      */
     protected function addSidebar()
     {
-        IdentityProofHelper::addSubmenu($this->getName());
+        IdentityproofHelper::addSubmenu($this->getName());
         $this->sidebar = JHtmlSidebar::render();
     }
 
@@ -90,18 +88,18 @@ class IdentityProofViewFiles extends JViewLegacy
         JToolBarHelper::title(JText::_('COM_IDENTITYPROOF_FILES_MANAGER'));
         JToolbarHelper::editList('file.edit');
         JToolbarHelper::divider();
-        JToolBarHelper::custom('files.reviewed', "ok", "", JText::_("COM_IDENTITYPROOF_REVIEWED"), false);
-        JToolBarHelper::custom('files.pending', "clock", "", JText::_("COM_IDENTITYPROOF_PENDING"), false);
+        JToolBarHelper::custom('files.reviewed', 'ok', '', JText::_('COM_IDENTITYPROOF_REVIEWED'), false);
+        JToolBarHelper::custom('files.pending', 'clock', '', JText::_('COM_IDENTITYPROOF_PENDING'), false);
         JToolbarHelper::divider();
 
-        if ($this->state->get('filter.state') == -2) {
-            JToolbarHelper::deleteList(JText::_("COM_IDENTITYPROOF_DELETE_ITEMS_QUESTION"), 'files.delete', 'JTOOLBAR_EMPTY_TRASH');
+        if ((int)$this->state->get('filter.state') === -2) {
+            JToolbarHelper::deleteList(JText::_('COM_IDENTITYPROOF_DELETE_ITEMS_QUESTION'), 'files.delete', 'JTOOLBAR_EMPTY_TRASH');
         } else {
             JToolbarHelper::trash('files.trashed');
         }
 
         JToolbarHelper::divider();
-        JToolBarHelper::custom('files.backToDashboard', "dashboard", "", JText::_("COM_IDENTITYPROOF_DASHBOARD"), false);
+        JToolBarHelper::custom('files.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
     }
 
     /**
@@ -119,7 +117,7 @@ class IdentityProofViewFiles extends JViewLegacy
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
 
-        JHtml::_("prism.ui.pnotify");
+        JHtml::_('prism.ui.pnotify');
         JHtml::_('prism.ui.joomlaHelper');
         JHtml::_('prism.ui.joomlaList');
 

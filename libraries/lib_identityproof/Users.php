@@ -4,12 +4,12 @@
  * @subpackage   Users
  * @author       Todor Iliev
  * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      GNU General Public License version 3 or later; see LICENSE.txt
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
-namespace IdentityProof;
+namespace Identityproof;
 
-use Prism;
+use Prism\Database;
 use Joomla\Utilities\ArrayHelper;
 
 defined('JPATH_PLATFORM') or die;
@@ -20,7 +20,7 @@ defined('JPATH_PLATFORM') or die;
  * @package      ProofOfIdentity
  * @subpackage   Users
  */
-class Users extends Prism\Database\ArrayObject
+class Users extends Database\Collection
 {
     /**
      * Load users data from database.
@@ -41,20 +41,19 @@ class Users extends Prism\Database\ArrayObject
      *
      * @param array $options
      */
-    public function load($options = array())
+    public function load(array $options = array())
     {
-        $ids = (!isset($options["ids"])) ? array() : $options["ids"];
-        
-        ArrayHelper::toInteger($ids);
+        $ids = (array_key_exists('ids', $options)) ? $options['ids'] : array();
+        $ids = ArrayHelper::toInteger($ids);
 
-        if (!empty($ids)) {
+        if (count($ids) > 0) {
             $query = $this->db->getQuery(true);
 
             $query
-                ->select("a.id, a.state, b.name, b.email")
-                ->from($this->db->quoteName("#__identityproof_users", "a"))
-                ->leftJoin($this->db->quoteName("#__users", "b") . " ON a.id = b.id")
-                ->where("a.id IN ( " . implode(",", $ids) . " )");
+                ->select('a.id, a.state, b.name, b.email')
+                ->from($this->db->quoteName('#__identityproof_users', 'a'))
+                ->leftJoin($this->db->quoteName('#__users', 'b') . ' ON a.id = b.id')
+                ->where('a.id IN ( ' . implode(',', $ids) . ' )');
 
             $this->db->setQuery($query);
             $this->items = (array)$this->db->loadAssocList();
@@ -85,7 +84,7 @@ class Users extends Prism\Database\ArrayObject
         $item = null;
 
         foreach ($this->items as $key => $value) {
-            if ($id == $key) {
+            if ((int)$id === (int)$key) {
                 $item = new User(\JFactory::getDbo());
                 $item->bind($value);
                 break;

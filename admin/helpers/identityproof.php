@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,9 +13,9 @@ defined('_JEXEC') or die;
 /**
  * It is Proof of Identity helper class
  */
-class IdentityProofHelper
+class IdentityproofHelper
 {
-    protected static $extension = "com_identityproof";
+    protected static $extension = 'com_identityproof';
 
     /**
      * Configure the Linkbar.
@@ -29,25 +29,25 @@ class IdentityProofHelper
         JHtmlSidebar::addEntry(
             JText::_('COM_IDENTITYPROOF_DASHBOARD'),
             'index.php?option=' . self::$extension . '&view=dashboard',
-            $vName == 'dashboard'
+            $vName === 'dashboard'
         );
 
         JHtmlSidebar::addEntry(
             JText::_('COM_IDENTITYPROOF_FILES'),
             'index.php?option=' . self::$extension . '&view=files',
-            $vName == 'records'
+            $vName === 'records'
         );
 
         JHtmlSidebar::addEntry(
             JText::_('COM_IDENTITYPROOF_USERS'),
             'index.php?option=' . self::$extension . '&view=users',
-            $vName == 'users'
+            $vName === 'users'
         );
 
         JHtmlSidebar::addEntry(
             JText::_('COM_IDENTITYPROOF_PLUGINS'),
-            'index.php?option=com_plugins&view=plugins&filter_search=' . rawurlencode("proof"),
-            $vName == 'plugins'
+            'index.php?option=com_plugins&view=plugins&filter_search=' . rawurlencode('proof'),
+            $vName === 'plugins'
         );
     }
 
@@ -62,7 +62,7 @@ class IdentityProofHelper
     public static function encrypt(array $keys, $data)
     {
         $chiper = new JCryptCipherRijndael256();
-        $key    = new JCryptKey("rijndael256", $keys["private"], $keys["public"]);
+        $key    = new JCryptKey('rijndael256', $keys['private'], $keys['public']);
 
         $crypt  = new JCrypt($chiper, $key);
 
@@ -80,7 +80,7 @@ class IdentityProofHelper
     public static function decrypt(array $keys, $data)
     {
         $chiper = new JCryptCipherRijndael256();
-        $key    = new JCryptKey("rijndael256", $keys["private"], $keys["public"]);
+        $key    = new JCryptKey('rijndael256', $keys['private'], $keys['public']);
 
         $crypt  = new JCrypt($chiper, $key);
 

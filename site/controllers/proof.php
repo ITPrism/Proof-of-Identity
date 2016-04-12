@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,10 +13,10 @@ defined('_JEXEC') or die;
 /**
  * Proof controller
  *
- * @package     IdentityProof
+ * @package     Identityproof
  * @subpackage  Components
  */
-class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
+class IdentityproofControllerProof extends Prism\Controller\Form\Frontend
 {
     /**
      * Method to get a model object, loading it if required.
@@ -25,13 +25,12 @@ class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
      * @param    string $prefix The class prefix. Optional.
      * @param    array  $config Configuration array for model. Optional.
      *
-     * @return    object    The model.
+     * @return   IdentityproofModelProof    The model.
      * @since    1.5
      */
-    public function getModel($name = 'Proof', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'Proof', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
 
@@ -40,10 +39,10 @@ class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
         // Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-        $userId = JFactory::getUser()->get("id");
+        $userId = JFactory::getUser()->get('id');
         if (!$userId) {
             $redirectOptions = array(
-                "force_direction" => "index.php?option=com_users&view=login"
+                'force_direction' => 'index.php?option=com_users&view=login'
             );
             $this->displayNotice(JText::_('COM_IDENTITYPROOF_ERROR_NOT_LOG_IN'), $redirectOptions);
             return;
@@ -54,22 +53,22 @@ class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
 
         // Get the file.
         $file = $this->input->files->get('jform', array(), 'array');
-        $file = Joomla\Utilities\ArrayHelper::getValue($file, "file");
+        $file = Joomla\Utilities\ArrayHelper::getValue($file, 'file');
 
-        $data["file"] = $file;
+        $data['file'] = $file;
 
         $redirectOptions = array(
-            "view" => "proof"
+            'view' => 'proof'
         );
 
         $model = $this->getModel();
-        /** @var $model IdentityProofModelProof */
+        /** @var $model IdentityproofModelProof */
 
         $form = $model->getForm($data, false);
         /** @var $form JForm */
 
         if (!$form) {
-            throw new Exception(JText::_("COM_IDENTITYPROOF_ERROR_FORM_CANNOT_BE_LOADED"));
+            throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_FORM_CANNOT_BE_LOADED'));
         }
 
         // Test if the data is valid.
@@ -86,8 +85,8 @@ class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
             // Upload image
             if (!empty($file['name'])) {
                 $file = $model->uploadFile($file);
-                if (!empty($file)) {
-                    $validData["file"] = $file;
+                if ($file !== null and $file !== '') {
+                    $validData['file'] = $file;
                 }
             }
 
@@ -97,14 +96,14 @@ class IdentityProofControllerProof extends Prism\Controller\Form\Frontend
             $this->displayWarning($e->getMessage(), $redirectOptions);
             return;
         } catch (InvalidArgumentException $e) {
-            JLog::add($e->getMessage());
-            $this->displayWarning(JText::_("COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED"), $redirectOptions);
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
+            $this->displayWarning(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'), $redirectOptions);
             return;
         } catch (Exception $e) {
-            JLog::add($e->getMessage());
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_SYSTEM'));
         }
 
-        $this->displayMessage(JText::_("COM_IDENTITYPROOF_FILE_SUCCESSFULLY_UPLOADED"), $redirectOptions);
+        $this->displayMessage(JText::_('COM_IDENTITYPROOF_FILE_SUCCESSFULLY_UPLOADED'), $redirectOptions);
     }
 }

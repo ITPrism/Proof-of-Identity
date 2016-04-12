@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -19,11 +19,7 @@ defined('_JEXEC') or die;
     <?php else : ?>
     <div id="j-main-container">
     <?php endif;?>
-        <?php
-        // Search tools bar
-        echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
-        ?>
-
+        <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
         <table class="table table-striped" id="usersList">
             <thead><?php echo $this->loadTemplate('head');?></thead>
             <tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
@@ -35,3 +31,12 @@ defined('_JEXEC') or die;
         <?php echo JHtml::_('form.token'); ?>
     </div>
 </form>
+
+<div class="modal hide fade" tabindex="-1" id="js-modal-socialprofiles" style="display: none; min-height: 500px;" aria-hidden="true">
+	<div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">×</button>
+        <h3><?php echo JText::_('COM_IDENTITYPROOF_SOCIAL_PROFILES'); ?></h3>
+	</div>
+    <div class="modal-body" id="js-socialprofiles-body" style="max-height: 618px;">
+	</div>
+</div>

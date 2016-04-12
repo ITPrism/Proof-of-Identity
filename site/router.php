@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @return array
  */
-function IdentityProofBuildRoute(&$query)
+function IdentityproofBuildRoute(&$query)
 {
     $segments = array();
 
@@ -34,7 +34,7 @@ function IdentityProofBuildRoute(&$query)
     }
 
     // Check again
-    if ($menuItemGiven and isset($menuItem) and strcmp("com_identityproof", $menuItem->component) != 0) {
+    if ($menuItemGiven and isset($menuItem) and strcmp('com_identityproof', $menuItem->component) !== 0) {
         $menuItemGiven = false;
         unset($query['Itemid']);
     }
@@ -65,7 +65,7 @@ function IdentityProofBuildRoute(&$query)
 
         switch ($view) {
 
-            case "proof":
+            case 'proof':
                 if (isset($query['view'])) {
                     unset($query['view']);
                 }
@@ -78,11 +78,11 @@ function IdentityProofBuildRoute(&$query)
     // Layout
     if (isset($query['layout'])) {
         if ($menuItemGiven and isset($menuItem->query['layout'])) {
-            if ($query['layout'] == $menuItem->query['layout']) {
+            if ($query['layout'] === $menuItem->query['layout']) {
                 unset($query['layout']);
             }
         } else {
-            if ($query['layout'] == 'default') {
+            if ($query['layout'] === 'default') {
                 unset($query['layout']);
             }
         }
@@ -104,7 +104,7 @@ function IdentityProofBuildRoute(&$query)
  *
  * @return array
  */
-function IdentityProofParseRoute($segments)
+function IdentityproofParseRoute($segments)
 {
     $total = count($segments);
     $vars = array();
@@ -120,7 +120,7 @@ function IdentityProofParseRoute($segments)
 
     // Standard routing for articles.  If we don't pick up an Itemid then we get the view from the segments
     // the first segment is the view and the last segment is the id of the details, category or payment.
-    if (!isset($item)) {
+    if ($item === null) {
         $vars['view']  = $segments[0];
         return $vars;
     }

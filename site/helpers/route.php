@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -24,10 +24,10 @@ jimport("identityproof.init");
  * @subpackage     Components
  * @since          1.5
  */
-abstract class IdentityProofHelperRoute
+abstract class IdentityproofHelperRoute
 {
     protected static $lookup;
-    protected static $component = "com_identityproof";
+    protected static $component = 'com_identityproof';
 
     /**
      * This method route item in the view "projects".

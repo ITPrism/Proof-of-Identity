@@ -4,10 +4,10 @@
  * @subpackage   Users
  * @author       Todor Iliev
  * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      GNU General Public License version 3 or later; see LICENSE.txt
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
-namespace IdentityProof;
+namespace Identityproof;
 
 use Prism;
 
@@ -33,31 +33,31 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      * </code>
      *
-     * @param array $keys
+     * @param array|int $keys
      * @param array $options
      */
-    public function load($keys, $options = array())
+    public function load($keys, array $options = array())
     {
         $query = $this->db->getQuery(true);
 
         $query
             ->select(
-                "a.id, a.state, " .
-                "b.name, b.email"
+                'a.id, a.state, ' .
+                'b.name, b.email'
             )
-            ->from($this->db->quoteName("#__identityproof_users", "a"))
-            ->leftJoin($this->db->quoteName("#__users", "b") . " ON a.id = b.id");
+            ->from($this->db->quoteName('#__identityproof_users', 'a'))
+            ->leftJoin($this->db->quoteName('#__users', 'b') . ' ON a.id = b.id');
 
-        if (is_array($keys) and !empty($keys)) {
-            foreach ($keys as $key => $value) {
-                $query->where($this->db->quoteName($key) ." = ". $this->db->quote($value));
-            }
+        if (!is_array($keys)) {
+            $query->where('a.id = ' . (int)$keys);
         } else {
-            $query->where("a.id = " . (int)$keys);
+            foreach ($keys as $key => $value) {
+                $query->where($this->db->quoteName($key) .' = '. $this->db->quote($value));
+            }
         }
 
         $this->db->setQuery($query);
@@ -74,7 +74,7 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      *
      * $user->toVerified();
@@ -94,7 +94,7 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      *
      * $user->toVerified();
@@ -115,7 +115,7 @@ class User extends Prism\Database\Table
      *  "state" => 2
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->bind($data);
      * $user->store();
      * </code>
@@ -123,7 +123,7 @@ class User extends Prism\Database\Table
     public function store()
     {
         if (!$this->id) {
-            throw new \InvalidArgumentException("Invalid ID (user ID).");
+            throw new \InvalidArgumentException('Invalid ID (user ID).');
         }
 
         if (!$this->isExists()) { // Insert
@@ -138,9 +138,9 @@ class User extends Prism\Database\Table
         $query = $this->db->getQuery(true);
 
         $query
-            ->insert($this->db->quoteName("#__identityproof_users"))
-            ->set($this->db->quoteName("id") . "=" . $this->db->quote($this->id))
-            ->set($this->db->quoteName("state") . "=" . $this->db->quote($this->state));
+            ->insert($this->db->quoteName('#__identityproof_users'))
+            ->set($this->db->quoteName('id') . '=' . $this->db->quote($this->id))
+            ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state));
 
         $this->db->setQuery($query);
         $this->db->execute();
@@ -151,9 +151,9 @@ class User extends Prism\Database\Table
         $query = $this->db->getQuery(true);
 
         $query
-            ->update($this->db->quoteName("#__identityproof_users"))
-            ->set($this->db->quoteName("state") . "=" . $this->db->quote($this->state))
-            ->where($this->db->quoteName("id") ."=". (int)$this->id);
+            ->update($this->db->quoteName('#__identityproof_users'))
+            ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state))
+            ->where($this->db->quoteName('id') .'='. (int)$this->id);
 
         $this->db->setQuery($query);
         $this->db->execute();
@@ -164,9 +164,9 @@ class User extends Prism\Database\Table
         $query = $this->db->getQuery(true);
 
         $query
-            ->select("COUNT(*)")
-            ->from($this->db->quoteName("#__identityproof_users", "a"))
-            ->where($this->db->quoteName("a.id") . " = " . $this->db->quote($this->id));
+            ->select('COUNT(*)')
+            ->from($this->db->quoteName('#__identityproof_users', 'a'))
+            ->where($this->db->quoteName('a.id') . ' = ' . $this->db->quote($this->id));
 
         $this->db->setQuery($query);
         return (bool)$this->db->loadResult();
@@ -180,17 +180,19 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      *
      * if (!$user->getId()) {
      * ...
      * }
      * </code>
+     *
+     * @return int
      */
     public function getId()
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -201,15 +203,17 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      *
      * $state = $user->getState();
      * </code>
+     *
+     * @return int
      */
     public function getState()
     {
-        return $this->state;
+        return (int)$this->state;
     }
 
     /**
@@ -220,11 +224,13 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User(\JFactory::getDbo());
+     * $user    = new Identityproof\User(\JFactory::getDbo());
      * $user->load($keys);
      *
      * $user = $user->getName();
      * </code>
+     *
+     * @return string
      */
     public function getName()
     {
@@ -239,7 +245,7 @@ class User extends Prism\Database\Table
      *    "user_id" => 1
      * );
      *
-     * $user    = new IdentityProof\User();
+     * $user    = new Identityproof\User();
      * $user->setDb(\JFactory::getDbo());
      * $user->load($keys);
      *
@@ -247,9 +253,11 @@ class User extends Prism\Database\Table
      * ...
      * }
      * </code>
+     *
+     * @return bool
      */
     public function isVerified()
     {
-        return (!$this->state) ? false : true;
+        return (bool)$this->state;
     }
 }

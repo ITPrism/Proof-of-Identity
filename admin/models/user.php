@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofModelUser extends JModelAdmin
+class IdentityproofModelUser extends JModelAdmin
 {
     /**
      * Returns a reference to the a Table object, always creating it.
@@ -22,7 +22,7 @@ class IdentityProofModelUser extends JModelAdmin
      * @return  JTable  A database object
      * @since   1.6
      */
-    public function getTable($type = 'User', $prefix = 'IdentityProofTable', $config = array())
+    public function getTable($type = 'User', $prefix = 'IdentityproofTable', $config = array())
     {
         return JTable::getInstance($type, $prefix, $config);
     }
@@ -75,20 +75,19 @@ class IdentityProofModelUser extends JModelAdmin
      */
     public function getItem($pk = null)
     {
-        $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+        $pk = ($pk !== null and (int)$pk > 0) ? $pk : (int) $this->getState($this->getName() . '.id');
 
-        $db = $this->getDbo();
-
+        $db    = $this->getDbo();
         $query = $db->getQuery(true);
 
         $query
             ->select(
-                "a.id, a.state, " .
-                "b.name"
+                'a.id, a.state, ' .
+                'b.name'
             )
-            ->from($db->quoteName("#__identityproof_users", "a"))
-            ->leftJoin($db->quoteName("#__users", "b") . " ON a.id = b.id")
-            ->where("a.id = " . (int)$pk);
+            ->from($db->quoteName('#__identityproof_users', 'a'))
+            ->leftJoin($db->quoteName('#__users', 'b') . ' ON a.id = b.id')
+            ->where('a.id = ' . (int)$pk);
 
         $db->setQuery($query);
         $result = $db->loadObject();
@@ -105,18 +104,18 @@ class IdentityProofModelUser extends JModelAdmin
      */
     public function save($data)
     {
-        $id          = Joomla\Utilities\ArrayHelper::getValue($data, "id");
-        $state       = Joomla\Utilities\ArrayHelper::getValue($data, "state");
+        $id          = Joomla\Utilities\ArrayHelper::getValue($data, 'id');
+        $state       = Joomla\Utilities\ArrayHelper::getValue($data, 'state');
 
         // Load a record from the database
         $row = $this->getTable();
         $row->load($id);
 
-        $row->set("state", $state);
+        $row->set('state', $state);
 
         $row->store(true);
 
-        return $row->get("id");
+        return $row->get('id');
     }
 
     /**
@@ -130,11 +129,10 @@ class IdentityProofModelUser extends JModelAdmin
     public function verify($pks, $value)
     {
         if (!is_array($pks)) {
-            throw new InvalidArgumentException(JText::_("COM_IDENTITYPROOF_ERROR_INVALID_PARAMETER"));
+            throw new InvalidArgumentException(JText::_('COM_IDENTITYPROOF_ERROR_INVALID_PARAMETER'));
         }
 
-        Joomla\Utilities\ArrayHelper::toInteger($pks);
-
+        $pks = Joomla\Utilities\ArrayHelper::toInteger($pks);
         if (!$pks) {
             return;
         }
@@ -143,9 +141,9 @@ class IdentityProofModelUser extends JModelAdmin
 
         $query = $db->getQuery(true);
         $query
-            ->update($db->quoteName("#__identityproof_users"))
-            ->set($db->quoteName("state") ." = " . (int)$value)
-            ->where($db->quoteName("id") ." IN (" . implode(",", $pks) . ")");
+            ->update($db->quoteName('#__identityproof_users'))
+            ->set($db->quoteName('state') .' = ' . (int)$value)
+            ->where($db->quoteName('id') .' IN (' . implode(',', $pks) . ')');
 
         $db->setQuery($query);
         $db->execute();
@@ -162,7 +160,7 @@ class IdentityProofModelUser extends JModelAdmin
         $result     = $dispatcher->trigger($this->event_change_state, array($context, $pks, $value));
 
         if (in_array(false, $result, true)) {
-            throw new RuntimeException(JText::_("COM_IDENTITYPROOF_ERROR_TRIGGERING_PLUGIN"));
+            throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_TRIGGERING_PLUGIN'));
         }
 
         // Clear the component's cache

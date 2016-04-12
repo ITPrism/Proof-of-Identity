@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerUsers extends Prism\Controller\Admin
+class IdentityproofControllerUsers extends Prism\Controller\Admin
 {
     public function __construct($config = array())
     {
@@ -29,10 +29,9 @@ class IdentityProofControllerUsers extends Prism\Controller\Admin
         $this->registerTask('unverify', 'verify');
     }
 
-    public function getModel($name = 'User', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'User', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
 
@@ -52,14 +51,13 @@ class IdentityProofControllerUsers extends Prism\Controller\Admin
         $value = Joomla\Utilities\ArrayHelper::getValue($data, $task, 0, 'int');
 
         $redirectOptions = array(
-            "view" => "users"
+            'view' => 'users'
         );
 
         // Make sure the item ids are integers
-        Joomla\Utilities\ArrayHelper::toInteger($cid);
-        if (empty($cid)) {
+        $cid = Joomla\Utilities\ArrayHelper::toInteger($cid);
+        if (!$cid) {
             $this->displayNotice(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), $redirectOptions);
-
             return;
         }
 
@@ -80,7 +78,7 @@ class IdentityProofControllerUsers extends Prism\Controller\Admin
             throw new Exception(JText::_($this->text_prefix.'_ERROR_SYSTEM'));
         }
 
-        if ($value == 1) {
+        if ((int)$value === 1) {
             $msg = $this->text_prefix . '_N_USERS_VERIFIED';
         } else {
             $msg = $this->text_prefix . '_N_USERS_UNVERIFIED';

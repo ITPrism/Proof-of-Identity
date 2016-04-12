@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.4" type="plugin" group="content" method="upgrade">
+<extension version="3.5" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_IDENTITYPROOFADMINMAIL</name>
     <author>Todor Iliev</author>
-    <copyright>Copyright (C) 2015 Todor Iliev ( ITPrism.com ). All rights reserved.</copyright>
-    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+    <copyright>Copyright (C) 2016 Todor Iliev ( ITPrism.com ). All rights reserved.</copyright>
+    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPLv3</license>
     <authorEmail>todor@itprism.com</authorEmail>
     <authorUrl>http://itprism.com</authorUrl>
-    <version>2.1</version>
-    <creationDate>05 August, 2015</creationDate>
+    <version>2.2</version>
+    <creationDate>12 April, 2016</creationDate>
     <description><![CDATA[
     <p>Proof of Identity Admin Mail is a plugin that sends notification mails to the administrator.</p>
     <p><a href="http://itprism.com/" target="_blank">Subscribe for the newsletter</a> to receive information about updates and new ITPrism extensions.</p>

@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * These class contains methods using for upgrading the extension.
  */
-class IdentityProofInstallHelper
+class IdentityproofInstallHelper
 {
     public static function startTable()
     {
@@ -24,7 +24,7 @@ class IdentityProofInstallHelper
 
     public static function endTable()
     {
-        echo "</table></div>";
+        echo '</table></div>';
     }
 
     public static function addRowHeading($heading)
@@ -50,11 +50,11 @@ class IdentityProofInstallHelper
      */
     public static function addRow($title, $result, $info)
     {
-        $outputType = JArrayHelper::getValue($result, "type", "");
-        $outputText = JArrayHelper::getValue($result, "text", "");
+        $outputType = Joomla\Utilities\ArrayHelper::getValue($result, 'type', '');
+        $outputText = Joomla\Utilities\ArrayHelper::getValue($result, 'text', '');
 
-        $output = "";
-        if (!empty($outputType) and !empty($outputText)) {
+        $output = '';
+        if ($outputType !== '' and $outputText !== '') {
             $output = '<span class="label label-' . $outputType . '">' . $outputText . '</span>';
         }
 
@@ -70,10 +70,10 @@ class IdentityProofInstallHelper
     {
         // Generate string
         $hash = md5(uniqid(time() + mt_rand(), true));
-        $hash = substr($hash, 0, rand(6, 12));
+        $hash = substr($hash, 0, mt_rand(6, 12));
 
         // Add prefix
-        $hash = "ip" . $hash;
+        $hash = 'ip' . $hash;
 
         return $hash;
     }
@@ -81,25 +81,25 @@ class IdentityProofInstallHelper
     public static function createFolder($filesFolder)
     {
         if (true !== JFolder::create($filesFolder)) {
-            JLog::add(JText::sprintf("COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FOLDER", $filesFolder));
+            JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FOLDER', $filesFolder));
         } else {
 
             // Create .htaccess file.
-            $htaccessFile = JPath::clean($filesFolder."/.htaccess");
+            $htaccessFile = JPath::clean($filesFolder.'/.htaccess');
 
-            $content = "## Restricted for all requests.\nDeny from all";
+            $content = '## Restricted for all requests.\nDeny from all';
 
             if (true !== JFile::write($htaccessFile, $content)) {
-                JLog::add(JText::sprintf("COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FILE", $htaccessFile));
+                JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FILE', $htaccessFile));
             }
 
             // Replace default path to the files.
-            $configFile = JPath::clean(JPATH_ADMINISTRATOR."/components/com_identityproof/config.xml");
+            $configFile = JPath::clean(JPATH_ADMINISTRATOR.'/components/com_identityproof/config.xml');
             if (!JFile::exists($configFile)) {
-                JLog::add(JText::sprintf("COM_IDENTITYPROOF_ERROR_CONFIG_NOT_EXISTS", $configFile));
+                JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CONFIG_NOT_EXISTS', $configFile));
             } else {
                 $content = file_get_contents($configFile);
-                $content = str_replace("{FILES_PATH}", $filesFolder, $content);
+                $content = str_replace('{FILES_PATH}', $filesFolder, $content);
 
                 file_put_contents($configFile, $content);
 

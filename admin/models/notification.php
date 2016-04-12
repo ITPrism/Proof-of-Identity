@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofModelNotification extends JModelAdmin
+class IdentityproofModelNotification extends JModelAdmin
 {
     /**
      * Returns a reference to the a Table object, always creating it.
@@ -22,7 +22,7 @@ class IdentityProofModelNotification extends JModelAdmin
      * @return  JTable  A database object
      * @since   1.6
      */
-    public function getTable($type = 'File', $prefix = 'IdentityProofTable', $config = array())
+    public function getTable($type = 'File', $prefix = 'IdentityproofTable', $config = array())
     {
         return JTable::getInstance($type, $prefix, $config);
     }
@@ -75,16 +75,15 @@ class IdentityProofModelNotification extends JModelAdmin
      */
     public function getItem($pk = null)
     {
-        $pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName() . '.id');
+        $pk = ($pk !== null and (int)$pk > 0) ? $pk : (int)$this->getState($this->getName() . '.id');
 
         $db = $this->getDbo();
-
         $query = $db->getQuery(true);
 
         $query
-            ->select("a.id, a.note")
-            ->from($db->quoteName("#__identityproof_files", "a"))
-            ->where("a.id = " . (int)$pk);
+            ->select('a.id, a.note')
+            ->from($db->quoteName('#__identityproof_files', 'a'))
+            ->where('a.id = ' . (int)$pk);
 
         $db->setQuery($query);
         $result = $db->loadObject();
@@ -102,20 +101,20 @@ class IdentityProofModelNotification extends JModelAdmin
     {
         $db     = $this->getDbo();
 
-        $note   = (!$note) ? "NULL" : $db->quote($note);
+        $note   = (!$note) ? 'NULL' : $db->quote($note);
 
         $query  = $db->getQuery(true);
 
         $query
-            ->update($db->quoteName("#__identityproof_files"))
-            ->set($db->quoteName("note") ."=". $note)
-            ->where($db->quoteName("id") ."=". (int)$id);
+            ->update($db->quoteName('#__identityproof_files'))
+            ->set($db->quoteName('note') .'='. $note)
+            ->where($db->quoteName('id') .'='. (int)$id);
 
         $db->setQuery($query);
         $db->execute();
 
         // Trigger leaving notice event
-        if (strcmp($note, "NULL") != 0) {
+        if (strcmp($note, 'NULL') !== 0) {
             $context = $this->option . '.' . $this->name;
 
             // Include the content plugins for the change of state event.
@@ -123,10 +122,10 @@ class IdentityProofModelNotification extends JModelAdmin
 
             // Trigger the onContentLeaveNote event.
             $dispatcher = JEventDispatcher::getInstance();
-            $result     = $dispatcher->trigger("onContentLeaveNote", array($context, $id));
+            $result     = $dispatcher->trigger('onContentLeaveNote', array($context, $id));
 
             if (in_array(false, $result, true)) {
-                throw new RuntimeException(JText::_("COM_IDENTITYPROOF_ERROR_TRIGGERING_PLUGIN"));
+                throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_TRIGGERING_PLUGIN'));
             }
         }
     }
@@ -145,15 +144,15 @@ class IdentityProofModelNotification extends JModelAdmin
         $query  = $db->getQuery(true);
 
         $query
-            ->select("a.note")
-            ->from($db->quoteName("#__identityproof_files", "a"))
-            ->where("a.id = ". (int)$id);
+            ->select('a.note')
+            ->from($db->quoteName('#__identityproof_files', 'a'))
+            ->where('a.id = '. (int)$id);
 
         $db->setQuery($query, 0, 1);
         $result = $db->loadResult();
 
         if (!$result) {
-            $result = "";
+            $result = '';
         }
 
         return $result;

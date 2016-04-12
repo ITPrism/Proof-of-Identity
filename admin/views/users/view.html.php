@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofViewUsers extends JViewLegacy
+class IdentityproofViewUsers extends JViewLegacy
 {
     /**
      * @var JDocumentHtml
@@ -29,24 +29,24 @@ class IdentityProofViewUsers extends JViewLegacy
     protected $listOrder;
     protected $listDirn;
     protected $saveOrder;
+    protected $socialProfiles;
 
     public $filterForm;
+    public $activeFilters;
 
     protected $sidebar;
-
-    public function __construct($config)
-    {
-        parent::__construct($config);
-        $this->option = JFactory::getApplication()->input->get("option");
-    }
-
+    
     public function display($tpl = null)
     {
+        $this->option = JFactory::getApplication()->input->get('option');
+        
         $this->state      = $this->get('State');
         $this->items      = $this->get('Items');
         $this->pagination = $this->get('Pagination');
 
-        // Get the ID of users which do not have records in Identity Proof table "users".
+        $model = $this->getModel();
+
+        // Get the ID of users which do not have records in Identity Proof table 'users'.
         $newUsers = array();
         foreach ($this->items as $item) {
             if (!$item->user_id) {
@@ -55,10 +55,11 @@ class IdentityProofViewUsers extends JViewLegacy
         }
 
         // Create users if they do not exist.
-        if (!empty($newUsers)) {
-            $model = $this->getModel();
+        if (count($newUsers) > 0) {
             $model->createUsers($newUsers);
         }
+
+        $this->socialProfiles = $model->getSocialProfiles($this->items);
 
         // Prepare sorting data
         $this->prepareSorting();
@@ -79,9 +80,10 @@ class IdentityProofViewUsers extends JViewLegacy
         // Prepare filters
         $this->listOrder = $this->escape($this->state->get('list.ordering'));
         $this->listDirn  = $this->escape($this->state->get('list.direction'));
-        $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') != 0) ? false : true;
+        $this->saveOrder = (strcmp($this->listOrder, 'a.ordering') === 0);
 
         $this->filterForm    = $this->get('FilterForm');
+        $this->activeFilters = $this->get('ActiveFilters');
     }
 
     /**
@@ -89,7 +91,7 @@ class IdentityProofViewUsers extends JViewLegacy
      */
     protected function addSidebar()
     {
-        IdentityProofHelper::addSubmenu($this->getName());
+        IdentityproofHelper::addSubmenu($this->getName());
         $this->sidebar = JHtmlSidebar::render();
     }
 
@@ -103,10 +105,10 @@ class IdentityProofViewUsers extends JViewLegacy
         // Set toolbar items for the page
         JToolBarHelper::title(JText::_('COM_IDENTITYPROOF_USERS_MANAGER'));
         JToolbarHelper::editList('user.edit');
-        JToolBarHelper::custom('users.verify', "ok", "", JText::_("COM_IDENTITYPROOF_VERIFY"));
-        JToolBarHelper::custom('users.unverify', "ban-circle", "", JText::_("COM_IDENTITYPROOF_UNVERIFY"));
+        JToolBarHelper::custom('users.verify', 'ok', '', JText::_('COM_IDENTITYPROOF_VERIFY'));
+        JToolBarHelper::custom('users.unverify', 'ban-circle', '', JText::_('COM_IDENTITYPROOF_UNVERIFY'));
         JToolbarHelper::divider();
-        JToolBarHelper::custom('users.backToDashboard', "dashboard", "", JText::_("COM_IDENTITYPROOF_DASHBOARD"), false);
+        JToolBarHelper::custom('users.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
     }
 
     /**
@@ -123,5 +125,7 @@ class IdentityProofViewUsers extends JViewLegacy
 
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
+
+        $this->document->addScript('../media/' . $this->option . '/js/admin/' . JString::strtolower($this->getName()) . '.js');
     }
 }

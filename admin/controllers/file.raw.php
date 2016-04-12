@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,11 +13,11 @@ defined('_JEXEC') or die;
 /**
  * File controller class.
  *
- * @package        IdentityProof
+ * @package        Identityproof
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerFile extends JControllerLegacy
+class IdentityproofControllerFile extends JControllerLegacy
 {
     /**
      * Method to get a model object, loading it if required.
@@ -26,24 +26,22 @@ class IdentityProofControllerFile extends JControllerLegacy
      * @param    string $prefix The class prefix. Optional.
      * @param    array  $config Configuration array for model. Optional.
      *
-     * @return    object    The model.
+     * @return   IdentityproofModelFile    The model.
      * @since    1.5
      */
-    public function getModel($name = 'File', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'File', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
     
     public function download()
     {
         // Check for request forgeries.
-        JSession::checkToken("post") or jexit(JText::_('JINVALID_TOKEN'));
+        JSession::checkToken('post') or jexit(JText::_('JINVALID_TOKEN'));
         
-        $fileId   = $this->input->post->get("file_id", 0, "int");
-
-        $userId   = JFactory::getUser()->get("id");
+        $fileId   = $this->input->post->get('file_id', 0, 'int');
+        $userId   = JFactory::getUser()->get('id');
 
         // Validate the user.
         if (!$userId) {
@@ -51,30 +49,30 @@ class IdentityProofControllerFile extends JControllerLegacy
             return;
         }
 
-        $params = JComponentHelper::getParams("com_identityproof");
+        $params = JComponentHelper::getParams('com_identityproof');
         /** @var  $params Joomla\Registry\Registry */
 
         try {
 
             // Load file data.
-            $file = new IdentityProof\File(JFactory::getDbo());
+            $file = new Identityproof\File(JFactory::getDbo());
             $file->load($fileId);
 
             // Prepare keys.
             $keys      = array(
-                "private" => $file->getPrivate(),
-                "public"  => $file->getPublic()
+                'private' => $file->getPrivate(),
+                'public'  => $file->getPublic()
             );
 
             // Prepare meta data
-            $fileSize   = $file->getMetaData("filesize");
-            $mimeType   = $file->getMetaData("mime_type");
+//            $fileSize   = $file->getMetaData('filesize');
+            $mimeType   = $file->getMetaData('mime_type');
 
             // Decrypt the file.
-            $filePath   = JPath::clean($params->get("files_path") . DIRECTORY_SEPARATOR . $file->getFilename());
+            $filePath   = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $file->getFilename());
             $output     = file_get_contents($filePath);
 
-            $output     = IdentityProofHelper::decrypt($keys, $output);
+            $output     = IdentityproofHelper::decrypt($keys, $output);
 
         } catch (Exception $e) {
             JLog::add($e->getMessage());
@@ -89,6 +87,10 @@ class IdentityProofControllerFile extends JControllerLegacy
         $app->setHeader('Pragma', 'no-cache', true);
         $app->setHeader('Expires', '0', true);
         $app->setHeader('Content-Disposition', 'attachment; filename=' . $file->getFilename(), true);
+
+        echo $output;
+
+        $fileSize   = ob_get_length();
         $app->setHeader('Content-Length', $fileSize, true);
 
         $doc = JFactory::getDocument();
@@ -96,7 +98,6 @@ class IdentityProofControllerFile extends JControllerLegacy
 
         $app->sendHeaders();
 
-        echo $output;
         $app->close();
     }
 }

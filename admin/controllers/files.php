@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerFiles extends Prism\Controller\Admin
+class IdentityproofControllerFiles extends Prism\Controller\Admin
 {
     public function __construct($config = array())
     {
@@ -30,10 +30,9 @@ class IdentityProofControllerFiles extends Prism\Controller\Admin
         $this->registerTask('trashed', 'changeState');
     }
 
-    public function getModel($name = 'File', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'File', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
 
@@ -54,12 +53,12 @@ class IdentityProofControllerFiles extends Prism\Controller\Admin
         $value = Joomla\Utilities\ArrayHelper::getValue($data, $task, 0, 'int');
 
         $redirectOptions = array(
-            "view" => "files"
+            'view' => 'files'
         );
 
         // Make sure the item ids are integers
-        Joomla\Utilities\ArrayHelper::toInteger($cid);
-        if (empty($cid)) {
+        $cid = Joomla\Utilities\ArrayHelper::toInteger($cid);
+        if (!$cid) {
             $this->displayNotice(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), $redirectOptions);
             return;
         }
@@ -81,9 +80,9 @@ class IdentityProofControllerFiles extends Prism\Controller\Admin
             throw new Exception(JText::_($this->text_prefix.'_ERROR_SYSTEM'));
         }
 
-        if ($value == 1) {
+        if ((int)$value === 1) {
             $msg = $this->text_prefix . '_N_FILES_REVIEWED';
-        } elseif ($value == -2) {
+        } elseif ((int)$value === -2) {
             $msg = $this->text_prefix . '_N_ITEMS_TRASHED';
         } else {
             $msg = $this->text_prefix . '_N_FILES_PENDING';

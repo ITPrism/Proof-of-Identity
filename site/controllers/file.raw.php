@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,11 +13,11 @@ defined('_JEXEC') or die;
 /**
  * Data controller class.
  *
- * @package        IdentityProof
+ * @package        Identityproof
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerFile extends JControllerLegacy
+class IdentityproofControllerFile extends JControllerLegacy
 {
     /**
      * Method to get a model object, loading it if required.
@@ -26,13 +26,12 @@ class IdentityProofControllerFile extends JControllerLegacy
      * @param    string $prefix The class prefix. Optional.
      * @param    array  $config Configuration array for model. Optional.
      *
-     * @return    object    The model.
+     * @return   IdentityproofModelFile    The model.
      * @since    1.5
      */
-    public function getModel($name = 'File', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'File', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
     
@@ -46,12 +45,11 @@ class IdentityProofControllerFile extends JControllerLegacy
         // Create response object
         $response = new Prism\Response\Json();
 
-        $fileId = $this->input->post->get("id");
-
-        $userId = JFactory::getUser()->get("id");
+        $fileId = $this->input->post->get('id');
+        $userId = JFactory::getUser()->get('id');
 
         // Create validator object.
-        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
 
         if (!$userId) {
             $response
@@ -77,13 +75,13 @@ class IdentityProofControllerFile extends JControllerLegacy
 
             // Get the model
             $model = $this->getModel();
-            /** @var $model IdentityProofModelFile */
+            /** @var $model IdentityproofModelFile */
 
             $model->remove($fileId, $userId);
 
         } catch (RuntimeException $e) {
 
-            JLog::add($e->getMessage());
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             $response
                 ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
                 ->setText(JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'))
@@ -93,14 +91,14 @@ class IdentityProofControllerFile extends JControllerLegacy
             $app->close();
 
         } catch (Exception $e) {
-            JLog::add($e->getMessage());
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception($e->getMessage());
         }
 
         $response
             ->setTitle(JText::_('COM_IDENTITYPROOF_SUCCESS'))
             ->setText(JText::_('COM_IDENTITYPROOF_FILE_DELETED'))
-            ->setData(array("file_id" => $fileId))
+            ->setData(array('file_id' => $fileId))
             ->success();
 
         echo $response;
@@ -110,14 +108,14 @@ class IdentityProofControllerFile extends JControllerLegacy
     public function download()
     {
         // Check for request forgeries.
-        JSession::checkToken("post") or jexit(JText::_('JINVALID_TOKEN'));
+        JSession::checkToken('post') or jexit(JText::_('JINVALID_TOKEN'));
         
         $user   = JFactory::getUser();
         
-        $data   = $this->input->post->get("jform", array(), "array");
+        $data   = $this->input->post->get('jform', array(), 'array');
 
-        $fileId = Joomla\Utilities\ArrayHelper::getValue($data, "file_id", 0, "int");
-        $userId = $user->get("id");
+        $fileId = Joomla\Utilities\ArrayHelper::getValue($data, 'file_id', 0, 'int');
+        $userId = $user->get('id');
 
         // Validate the user.
         if (!$userId) {
@@ -126,55 +124,55 @@ class IdentityProofControllerFile extends JControllerLegacy
         }
 
         // Validate the item owner.
-        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
         if (!$validator->isValid()) {
-            $this->setRedirect(JRoute::_(IdentityProofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
+            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
             return;
         }
 
         // Validate the password.
-        $password = Joomla\Utilities\ArrayHelper::getValue($data, "password", null, "string");
-        $match    = JUserHelper::verifyPassword($password, $user->get("password"), $userId);
+        $password = Joomla\Utilities\ArrayHelper::getValue($data, 'password', null, 'string');
+        $match    = JUserHelper::verifyPassword($password, $user->get('password'), $userId);
         if (!$match) {
-            $this->setRedirect(JRoute::_(IdentityProofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
+            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
             return;
         }
 
-        $params = JComponentHelper::getParams("com_identityproof");
+        $params = JComponentHelper::getParams('com_identityproof');
         /** @var  $params Joomla\Registry\Registry */
 
         try {
 
-            // Load file data.
-            $file = new IdentityProof\File(JFactory::getDbo());
-
             $keys = array(
-                "id" => $fileId,
-                "user_id" => $userId
+                'id' => $fileId,
+                'user_id' => $userId
             );
+
+            // Load file data.
+            $file = new Identityproof\File(JFactory::getDbo());
             $file->load($keys);
 
             // Prepare keys.
             $keys      = array(
-                "private" => $file->getPrivate(),
-                "public"  => $file->getPublic()
+                'private' => $file->getPrivate(),
+                'public'  => $file->getPublic()
             );
 
-            // Prepare meta data
-            $fileSize   = $file->getMetaData("filesize");
-            $mimeType   = $file->getMetaData("mime_type");
-
             // Decrypt the file.
-            $filePath   = JPath::clean($params->get("files_path") . DIRECTORY_SEPARATOR . $file->getFilename());
-            $output     = file_get_contents($filePath);
+            $filePath   = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $file->getFilename());
 
-            $output     = IdentityProofHelper::decrypt($keys, $output);
+            $output     = file_get_contents($filePath);
+            $output     = IdentityproofHelper::decrypt($keys, $output);
+
+            // Prepare meta data
+//            $fileSize   = $file->getMetaData('filesize');
+            $mimeType   = $file->getMetaData('mime_type');
 
         } catch (Exception $e) {
-            JLog::add($e->getMessage());
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_SYSTEM'));
         }
-        
+
         $app = JFactory::getApplication();
 
         $app->setHeader('Content-Type', $mimeType, true);
@@ -183,6 +181,10 @@ class IdentityProofControllerFile extends JControllerLegacy
         $app->setHeader('Pragma', 'no-cache', true);
         $app->setHeader('Expires', '0', true);
         $app->setHeader('Content-Disposition', 'attachment; filename=' . $file->getFilename(), true);
+
+        echo $output;
+
+        $fileSize   = ob_get_length();
         $app->setHeader('Content-Length', $fileSize, true);
 
         $doc = JFactory::getDocument();
@@ -190,7 +192,6 @@ class IdentityProofControllerFile extends JControllerLegacy
 
         $app->sendHeaders();
 
-        echo $output;
         $app->close();
     }
 
@@ -204,12 +205,12 @@ class IdentityProofControllerFile extends JControllerLegacy
         // Create response object
         $response = new Prism\Response\Json();
 
-        $fileId = $this->input->get->get("id");
+        $fileId = $this->input->get->get('id');
 
-        $userId = JFactory::getUser()->get("id");
+        $userId = JFactory::getUser()->get('id');
 
         // Create validator object.
-        $validator = new IdentityProof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
+        $validator = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
 
         if (!$userId) {
             $response
@@ -235,18 +236,18 @@ class IdentityProofControllerFile extends JControllerLegacy
 
             // Get the model
             $model = $this->getModel();
-            /** @var $model IdentityProofModelFile */
+            /** @var $model IdentityproofModelFile */
 
             $note = $model->getNote($fileId, $userId);
 
         } catch (Exception $e) {
-            JLog::add($e->getMessage());
+            JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception($e->getMessage());
         }
 
         $response
             ->setTitle(JText::_('COM_IDENTITYPROOF_SUCCESS'))
-            ->setData(array("note" => $note))
+            ->setData(array('note' => $note))
             ->success();
 
         echo $response;

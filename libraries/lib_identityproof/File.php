@@ -4,10 +4,10 @@
  * @subpackage   Files
  * @author       Todor Iliev
  * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      GNU General Public License version 3 or later; see LICENSE.txt
+ * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
  */
 
-namespace IdentityProof;
+namespace Identityproof;
 
 use Prism;
 
@@ -41,41 +41,37 @@ class File extends Prism\Database\Table
      *    "user_id" => 2
      * );
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($keys);
      * </code>
      *
      * @param int|array $keys
      * @param array $options
      */
-    public function load($keys, $options = array())
+    public function load($keys, array $options = array())
     {
         $query = $this->db->getQuery(true);
 
         $query
             ->select(
-                "a.id, a.title, a.filename, a.private, a.public, a.meta_data, " .
-                "a.state, a.note, a.record_date, a.user_id"
+                'a.id, a.title, a.filename, a.private, a.public, a.meta_data, ' .
+                'a.state, a.note, a.record_date, a.user_id'
             )
-            ->from($this->db->quoteName("#__identityproof_files", "a"));
+            ->from($this->db->quoteName('#__identityproof_files', 'a'));
 
-        if (is_array($keys) and !empty($keys)) {
-            foreach ($keys as $key => $value) {
-                $query->where($this->db->quoteName("a.".$key) . "=" . $this->db->quote($value));
-            }
+        if (!is_array($keys)) {
+            $query->where('a.id = ' . (int)$keys);
         } else {
-            $query->where("a.id = " . (int)$keys);
+            foreach ($keys as $key => $value) {
+                $query->where($this->db->quoteName('a.'.$key) . '=' . $this->db->quote($value));
+            }
         }
 
         $this->db->setQuery($query);
-        $result = $this->db->loadAssoc();
+        $result = (array)$this->db->loadAssoc();
 
-        if (!$result) {
-            $result = array();
-        }
-
-        if (!empty($result["meta_data"])) {
-            $result["meta_data"] = json_decode($result["meta_data"], true);
+        if (!empty($result['meta_data'])) {
+            $result['meta_data'] = json_decode($result['meta_data'], true);
         }
 
         $this->bind($result);
@@ -90,7 +86,7 @@ class File extends Prism\Database\Table
      *    "title"    => "My ID"
      * );
      *
-     * $user   = new IdentityProof\File(\JFactory::getDbo());
+     * $user   = new Identityproof\File(\JFactory::getDbo());
      * $user->bind($data);
      * $user->store();
      * </code>
@@ -106,13 +102,13 @@ class File extends Prism\Database\Table
 
     protected function insertObject()
     {
-        $filename    = (!$this->filename) ? "NULL" : $this->db->quote($this->filename);
-        $private     = (!$this->private) ? "NULL" : $this->db->quote($this->private);
-        $public      = (!$this->public) ? "NULL" : $this->db->quote($this->public);
-        $note        = (!$this->note) ? "NULL" : $this->db->quote($this->note);
+        $filename    = (!$this->filename) ? 'NULL' : $this->db->quote($this->filename);
+        $private     = (!$this->private) ? 'NULL' : $this->db->quote($this->private);
+        $public      = (!$this->public) ? 'NULL' : $this->db->quote($this->public);
+        $note        = (!$this->note) ? 'NULL' : $this->db->quote($this->note);
 
         if (!$this->meta_data) {
-            $metaData    = "NULL";
+            $metaData    = 'NULL';
         } else {
 
             if (is_array($this->meta_data)) {
@@ -125,15 +121,15 @@ class File extends Prism\Database\Table
 
         $query = $this->db->getQuery(true);
         $query
-            ->insert($this->db->quoteName("#__identityproof_files"))
-            ->set($this->db->quoteName("title") . "=" . $this->db->quote($this->title))
-            ->set($this->db->quoteName("filename") . "=" . $filename)
-            ->set($this->db->quoteName("private") . "=" . $private)
-            ->set($this->db->quoteName("public") . "=" . $public)
-            ->set($this->db->quoteName("meta_data") . "=" . $metaData)
-            ->set($this->db->quoteName("state") . "=" . $this->db->quote($this->state))
-            ->set($this->db->quoteName("note") . "=" . $note)
-            ->set($this->db->quoteName("user_id") . "=" . (int)$this->user_id);
+            ->insert($this->db->quoteName('#__identityproof_files'))
+            ->set($this->db->quoteName('title') . '=' . $this->db->quote($this->title))
+            ->set($this->db->quoteName('filename') . '=' . $filename)
+            ->set($this->db->quoteName('private') . '=' . $private)
+            ->set($this->db->quoteName('public') . '=' . $public)
+            ->set($this->db->quoteName('meta_data') . '=' . $metaData)
+            ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state))
+            ->set($this->db->quoteName('note') . '=' . $note)
+            ->set($this->db->quoteName('user_id') . '=' . (int)$this->user_id);
 
         $this->db->setQuery($query);
         $this->db->execute();
@@ -143,13 +139,13 @@ class File extends Prism\Database\Table
 
     protected function updateObject()
     {
-        $filename    = (!$this->filename) ? "NULL" : $this->db->quote($this->filename);
-        $private     = (!$this->private) ? "NULL" : $this->db->quote($this->private);
-        $public      = (!$this->public) ? "NULL" : $this->db->quote($this->public);
-        $note        = (!$this->note) ? "NULL" : $this->db->quote($this->note);
+        $filename    = (!$this->filename) ? 'NULL' : $this->db->quote($this->filename);
+        $private     = (!$this->private) ? 'NULL' : $this->db->quote($this->private);
+        $public      = (!$this->public) ? 'NULL' : $this->db->quote($this->public);
+        $note        = (!$this->note) ? 'NULL' : $this->db->quote($this->note);
 
         if (!$this->meta_data) {
-            $metaData    = "NULL";
+            $metaData    = 'NULL';
         } else {
 
             if (is_array($this->meta_data)) {
@@ -163,16 +159,16 @@ class File extends Prism\Database\Table
 
         $query = $this->db->getQuery(true);
         $query
-            ->update($this->db->quoteName("#__identityproof_files"))
-            ->set($this->db->quoteName("title") . "=" . $this->db->quote($this->title))
-            ->set($this->db->quoteName("filename") . "=" . $filename)
-            ->set($this->db->quoteName("private") . "=" . $private)
-            ->set($this->db->quoteName("public") . "=" . $public)
-            ->set($this->db->quoteName("meta_data") . "=" . $metaData)
-            ->set($this->db->quoteName("state") . "=" . $this->db->quote($this->state))
-            ->set($this->db->quoteName("note") . "=" . $note)
-            ->set($this->db->quoteName("record_date") . "=" . $this->db->quote($this->record_date))
-            ->set($this->db->quoteName("user_id") . "=" . (int)$this->user_id);
+            ->update($this->db->quoteName('#__identityproof_files'))
+            ->set($this->db->quoteName('title') . '=' . $this->db->quote($this->title))
+            ->set($this->db->quoteName('filename') . '=' . $filename)
+            ->set($this->db->quoteName('private') . '=' . $private)
+            ->set($this->db->quoteName('public') . '=' . $public)
+            ->set($this->db->quoteName('meta_data') . '=' . $metaData)
+            ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state))
+            ->set($this->db->quoteName('note') . '=' . $note)
+            ->set($this->db->quoteName('record_date') . '=' . $this->db->quote($this->record_date))
+            ->set($this->db->quoteName('user_id') . '=' . (int)$this->user_id);
 
         $this->db->setQuery($query);
         $this->db->execute();
@@ -184,7 +180,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * if (!$file->getId()) {
@@ -196,7 +192,7 @@ class File extends Prism\Database\Table
      */
     public function getId()
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -205,7 +201,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $state = $file->getState();
@@ -215,7 +211,7 @@ class File extends Prism\Database\Table
      */
     public function getState()
     {
-        return $this->state;
+        return (int)$this->state;
     }
 
     /**
@@ -224,7 +220,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $note = $file->getNote();
@@ -243,7 +239,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $title = $file->getTitle();
@@ -262,7 +258,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $privateKey = $file->getPrivate();
@@ -281,7 +277,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $publicKey = $file->getPublic();
@@ -300,7 +296,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $filename = $file->getFilename();
@@ -319,7 +315,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $userId = $file->getUserId();
@@ -338,7 +334,7 @@ class File extends Prism\Database\Table
      * <code>
      * $fileId  = 1;
      *
-     * $file    = new IdentityProof\File(\JFactory::getDbo());
+     * $file    = new Identityproof\File(\JFactory::getDbo());
      * $file->load($fileId);
      *
      * $data = $file->getMetaData();
@@ -350,6 +346,6 @@ class File extends Prism\Database\Table
      */
     public function getMetaData($index)
     {
-        return (isset($this->meta_data[$index])) ? $this->meta_data[$index] : null;
+        return (array_key_exists($index, $this->meta_data)) ? $this->meta_data[$index] : null;
     }
 }

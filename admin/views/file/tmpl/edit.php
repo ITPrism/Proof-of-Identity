@@ -3,7 +3,7 @@
  * @package      CrowdFunding
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
                     <?php echo $this->form->getInput('filename'); ?>
                     <button class="btn" name="download" id="js-iproof-btn-download">
                         <i class="icon-download"></i>
-                        <?php echo JText::_("COM_IDENTITYPROOF_DOWNLOAD"); ?>
+                        <?php echo JText::_('COM_IDENTITYPROOF_DOWNLOAD'); ?>
                     </button>
                 </div>
             </div>
@@ -43,4 +43,4 @@ defined('_JEXEC') or die;
     </div>
 </div>
 
-<?php echo $this->loadTemplate("download"); ?>
+<?php echo $this->loadTemplate('download'); ?>

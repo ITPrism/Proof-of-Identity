@@ -3,14 +3,14 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-class IdentityProofModelFiles extends JModelList
+class IdentityproofModelFiles extends JModelList
 {
     /**
      * Constructor.
@@ -106,19 +106,19 @@ class IdentityProofModelFiles extends JModelList
             )
         );
         $query->from($db->quoteName('#__identityproof_files', 'a'));
-        $query->leftJoin($db->quoteName('#__users', 'b') . " ON a.user_id = b.id");
+        $query->leftJoin($db->quoteName('#__users', 'b') . ' ON a.user_id = b.id');
 
         // Filter by search in title
         $state = $this->getState('filter.state');
         if (is_numeric($state)) {
             $query->where('a.state = ' .(int)$state);
-        } elseif ($state === "") {
+        } elseif ($state === '') {
             $query->where('(a.state IN (0,1))');
         }
 
         // Filter by search in title
-        $search = $this->getState('filter.search');
-        if (!empty($search)) {
+        $search = (string)$this->getState('filter.search');
+        if ($search !== '') {
 
             if (stripos($search, 'id:') === 0) {
                 $query->where('a.id = ' . (int)substr($search, 3));
@@ -126,7 +126,7 @@ class IdentityProofModelFiles extends JModelList
                 $query->where('a.user_id = ' . (int)substr($search, 4));
             } else {
                 $escaped = $db->escape($search, true);
-                $quoted  = $db->quote("%" . $escaped . "%", false);
+                $quoted  = $db->quote('%' . $escaped . '%', false);
                 $query->where('a.title LIKE ' . $quoted);
             }
         }

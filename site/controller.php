@@ -1,16 +1,16 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // No direct access
 defined('_JEXEC') or die;
 
-class IdentityProofController extends JControllerLegacy
+class IdentityproofController extends JControllerLegacy
 {
     protected $cacheableViews = array();
 
@@ -32,7 +32,7 @@ class IdentityProofController extends JControllerLegacy
         $this->input->set('view', $viewName);
 
         // Cache some views.
-        if (in_array($viewName, $this->cacheableViews)) {
+        if (in_array($viewName, $this->cacheableViews, true)) {
             $cachable = true;
         }
 

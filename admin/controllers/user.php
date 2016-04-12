@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -16,28 +16,28 @@ defined('_JEXEC') or die;
  * @package      ProofOfIdentity
  * @subpackage   Components
  */
-class IdentityProofControllerUser extends Prism\Controller\Form\Backend
+class IdentityproofControllerUser extends Prism\Controller\Form\Backend
 {
     public function save($key = null, $urlVar = null)
     {
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $data   = $this->input->post->get('jform', array(), 'array');
-        $itemId = Joomla\Utilities\ArrayHelper::getValue($data, "id");
+        $itemId = Joomla\Utilities\ArrayHelper::getValue($data, 'id');
 
         $redirectOptions = array(
-            "task" => $this->getTask(),
-            "id"   => $itemId
+            'task' => $this->getTask(),
+            'id'   => $itemId
         );
 
         $model = $this->getModel();
-        /** @var $model IdentityProofModelUser */
+        /** @var $model IdentityproofModelUser */
 
         $form = $model->getForm($data, false);
         /** @var $form JForm */
 
         if (!$form) {
-            throw new Exception(JText::_("COM_IDENTITYPROOF_ERROR_FORM_CANNOT_BE_LOADED"));
+            throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_FORM_CANNOT_BE_LOADED'));
         }
 
         // Validate the form data
@@ -53,7 +53,7 @@ class IdentityProofControllerUser extends Prism\Controller\Form\Backend
 
             $itemId = $model->save($validData);
 
-            $redirectOptions["id"] = $itemId;
+            $redirectOptions['id'] = $itemId;
 
         } catch (Exception $e) {
             JLog::add($e->getMessage());

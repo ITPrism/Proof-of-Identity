@@ -1,9 +1,9 @@
 <?php
 /**
- * @package      IdentityProof
+ * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -13,11 +13,11 @@ defined('_JEXEC') or die;
 /**
  * Notification controller class.
  *
- * @package        IdentityProof
+ * @package        Identityproof
  * @subpackage     Component
  * @since          1.6
  */
-class IdentityProofControllerNotification extends JControllerLegacy
+class IdentityproofControllerNotification extends JControllerLegacy
 {
     /**
      * Method to get a model object, loading it if required.
@@ -26,13 +26,12 @@ class IdentityProofControllerNotification extends JControllerLegacy
      * @param    string $prefix The class prefix. Optional.
      * @param    array  $config Configuration array for model. Optional.
      *
-     * @return    object    The model.
+     * @return   IdentityproofModelNotification    The model.
      * @since    1.5
      */
-    public function getModel($name = 'Notification', $prefix = 'IdentityProofModel', $config = array('ignore_request' => true))
+    public function getModel($name = 'Notification', $prefix = 'IdentityproofModel', $config = array('ignore_request' => true))
     {
         $model = parent::getModel($name, $prefix, $config);
-
         return $model;
     }
 
@@ -42,16 +41,16 @@ class IdentityProofControllerNotification extends JControllerLegacy
     public function save()
     {
         // Check for request forgeries.
-        JSession::checkToken("post") or jexit(JText::_('JINVALID_TOKEN'));
+        JSession::checkToken('post') or jexit(JText::_('JINVALID_TOKEN'));
 
         $app = JFactory::getApplication();
 
         // Create response object
         $response = new Prism\Response\Json();
 
-        $fileId = $this->input->post->get("id");
-        $note   = $this->input->post->getString("note");
-        $userId = JFactory::getUser()->get("id");
+        $fileId = $this->input->post->get('id');
+        $note   = $this->input->post->getString('note');
+        $userId = JFactory::getUser()->get('id');
 
         if (!$userId or !$fileId) {
             $response
@@ -67,7 +66,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
 
             // Get the model
             $model = $this->getModel();
-            /** @var $model IdentityProofModelNotification */
+            /** @var $model IdentityproofModelNotification */
 
             $model->leaveNotice($fileId, $note);
 
@@ -101,14 +100,12 @@ class IdentityProofControllerNotification extends JControllerLegacy
      */
     public function getNotice()
     {
-        $app = JFactory::getApplication();
+        $app      = JFactory::getApplication();
 
         // Create response object
         $response = new Prism\Response\Json();
-
-        $fileId = $this->input->get->get("id");
-
-        $userId = JFactory::getUser()->get("id");
+        $fileId   = $this->input->get->get('id');
+        $userId   = JFactory::getUser()->get('id');
 
         if (!$userId or !$fileId) {
             $response
@@ -124,7 +121,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
 
             // Get the model
             $model = $this->getModel();
-            /** @var $model IdentityProofModelNotification */
+            /** @var $model IdentityproofModelNotification */
 
             $note = $model->getNotice($fileId);
 
@@ -135,7 +132,7 @@ class IdentityProofControllerNotification extends JControllerLegacy
 
         $response
             ->setTitle(JText::_('COM_IDENTITYPROOF_SUCCESS'))
-            ->setData(array("note" => $note, "token" => JSession::getFormToken()))
+            ->setData(array('note' => $note, 'token' => JSession::getFormToken()))
             ->success();
 
         echo $response;
