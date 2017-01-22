@@ -18,6 +18,7 @@
             <option value="0">COM_IDENTITYPROOF_PENDING</option>
             <option value="1">COM_IDENTITYPROOF_VERIFIED</option>
             <option value="-2">COM_IDENTITYPROOF_TRASHED</option>
+            <option value="*">COM_IDENTITYPROOF_ALL</option>
         </field>
     </fields>
     <fields name="list">

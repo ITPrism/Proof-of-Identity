@@ -3,16 +3,13 @@
  * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 // no direct access
 defined('_JEXEC') or die;
 
-/**
- * Get a list of items
- */
 class IdentityproofModelFile extends JModelLegacy
 {
     public function remove($fileId, $userId)
@@ -28,14 +25,13 @@ class IdentityproofModelFile extends JModelLegacy
             ->where('a.user_id = '. (int)$userId);
 
         $db->setQuery($query, 0, 1);
-        $result = $db->loadResult();
+        $filename = (string)$db->loadResult();
 
-        if ($result !== null and $result !== '') {
+        if ($filename !== '') {
             $params = JComponentHelper::getParams($this->option);
             /** @var  $params Joomla\Registry\Registry */
 
-            $file = JPath::clean($params->get('files_path') .DIRECTORY_SEPARATOR. $result);
-
+            $file = JPath::clean($params->get('files_path') .'/'. $filename, '/');
             if (JFile::exists($file)) {
                 JFile::delete($file);
             }
@@ -73,8 +69,7 @@ class IdentityproofModelFile extends JModelLegacy
             ->where('a.user_id = '. (int)$userId);
 
         $db->setQuery($query, 0, 1);
-        $result = (string)$db->loadResult();
 
-        return $result;
+        return (string)$db->loadResult();
     }
 }

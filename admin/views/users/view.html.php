@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -59,9 +59,10 @@ class IdentityproofViewUsers extends JViewLegacy
             $model->createUsers($newUsers);
         }
 
-        $this->socialProfiles = $model->getSocialProfiles($this->items);
+        $helperBus = new Prism\Helper\HelperBus($this->items);
+        $helperBus->addCommand(new Identityproof\Helper\PrepareUserProfilesHelper(JFactory::getDbo()));
+        $helperBus->handle();
 
-        // Prepare sorting data
         $this->prepareSorting();
 
         // Prepare actions
@@ -103,12 +104,12 @@ class IdentityproofViewUsers extends JViewLegacy
     protected function addToolbar()
     {
         // Set toolbar items for the page
-        JToolBarHelper::title(JText::_('COM_IDENTITYPROOF_USERS_MANAGER'));
+        JToolbarHelper::title(JText::_('COM_IDENTITYPROOF_USERS_MANAGER'));
         JToolbarHelper::editList('user.edit');
-        JToolBarHelper::custom('users.verify', 'ok', '', JText::_('COM_IDENTITYPROOF_VERIFY'));
-        JToolBarHelper::custom('users.unverify', 'ban-circle', '', JText::_('COM_IDENTITYPROOF_UNVERIFY'));
+        JToolbarHelper::custom('users.verify', 'ok', '', JText::_('COM_IDENTITYPROOF_VERIFY'));
+        JToolbarHelper::custom('users.unverify', 'ban-circle', '', JText::_('COM_IDENTITYPROOF_UNVERIFY'));
         JToolbarHelper::divider();
-        JToolBarHelper::custom('users.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
+        JToolbarHelper::custom('users.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
     }
 
     /**
@@ -126,6 +127,6 @@ class IdentityproofViewUsers extends JViewLegacy
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
 
-        $this->document->addScript('../media/' . $this->option . '/js/admin/' . JString::strtolower($this->getName()) . '.js');
+        $this->document->addScript('../media/' . $this->option . '/js/admin/' . strtolower($this->getName()) . '.js');
     }
 }

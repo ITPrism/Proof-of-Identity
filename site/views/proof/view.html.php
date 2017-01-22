@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -43,7 +43,6 @@ class IdentityproofViewProof extends JViewLegacy
     public function display($tpl = null)
     {
         $app          = JFactory::getApplication();
-
         $this->option = $app->input->get('option');
 
         $userId = JFactory::getUser()->get('id');
@@ -58,9 +57,28 @@ class IdentityproofViewProof extends JViewLegacy
         $this->state      = $this->get('State');
         $this->params     = $this->state->get('params');
 
+        $params          = JComponentHelper::getParams('com_identityproof');
+        $secretFolder    = JPath::clean($params->get('files_path'), '/');
+
+        // Create a folder.
+        if (!JFolder::exists($secretFolder)) {
+            if (!JFolder::create($secretFolder, 0740)) {
+                throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FOLDER_CANNOT_BE_CREATED_S', $secretFolder));
+            }
+        }
+
+        // Create .htaccess file to deny the access for that folder.
+        $htaccessFile = JPath::clean($secretFolder . '/.htaccess', '/');
+        if (!JFile::exists($htaccessFile)) {
+            $fileContent = 'Deny from all';
+            if (!JFile::write($htaccessFile, $fileContent)) {
+                throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FILE_CANNOT_BE_CREATED_S', $htaccessFile));
+            }
+        }
+
         // Get URI
         $this->uri        = JUri::getInstance();
-        $uriCloned        = clone($this->uri);
+        $uriCloned        = clone $this->uri;
 
         // Generate HTTPS URI.
         $uriCloned->setScheme('https');
@@ -134,14 +152,15 @@ class IdentityproofViewProof extends JViewLegacy
         JText::script('COM_IDENTITYPROOF_BROWSE');
         JText::script('COM_IDENTITYPROOF_REMOVE');
 
-        JHtml::_('bootstrap.tooltip');
         JHtml::_('jquery.framework');
         JHtml::_('Prism.ui.bootstrap3FileInput');
         JHtml::_("Prism.ui.pnotify");
         JHtml::_('Prism.ui.joomlaHelper');
         JHtml::_('Prism.ui.styles');
+        JHtml::_('Prism.ui.remodal');
 
-        $this->document->addScript('media/' . $this->option . '/js/site/proof.js');
+        $version = new Identityproof\Version();
+        $this->document->addScript('media/' . $this->option . '/js/site/proof.js?v='.$version->getShortVersion());
     }
 
     private function preparePageHeading()

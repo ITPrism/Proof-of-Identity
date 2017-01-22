@@ -24,8 +24,6 @@ class File extends Prism\Database\Table
     protected $id;
     protected $title;
     protected $filename;
-    protected $private;
-    protected $public;
     protected $meta_data;
     protected $state;
     protected $note;
@@ -54,7 +52,7 @@ class File extends Prism\Database\Table
 
         $query
             ->select(
-                'a.id, a.title, a.filename, a.private, a.public, a.meta_data, ' .
+                'a.id, a.title, a.filename, a.meta_data, ' .
                 'a.state, a.note, a.record_date, a.user_id'
             )
             ->from($this->db->quoteName('#__identityproof_files', 'a'));
@@ -103,14 +101,11 @@ class File extends Prism\Database\Table
     protected function insertObject()
     {
         $filename    = (!$this->filename) ? 'NULL' : $this->db->quote($this->filename);
-        $private     = (!$this->private) ? 'NULL' : $this->db->quote($this->private);
-        $public      = (!$this->public) ? 'NULL' : $this->db->quote($this->public);
         $note        = (!$this->note) ? 'NULL' : $this->db->quote($this->note);
 
         if (!$this->meta_data) {
             $metaData    = 'NULL';
         } else {
-
             if (is_array($this->meta_data)) {
                 $metaData = json_encode($this->meta_data);
                 $metaData = $this->db->quote($metaData);
@@ -124,8 +119,6 @@ class File extends Prism\Database\Table
             ->insert($this->db->quoteName('#__identityproof_files'))
             ->set($this->db->quoteName('title') . '=' . $this->db->quote($this->title))
             ->set($this->db->quoteName('filename') . '=' . $filename)
-            ->set($this->db->quoteName('private') . '=' . $private)
-            ->set($this->db->quoteName('public') . '=' . $public)
             ->set($this->db->quoteName('meta_data') . '=' . $metaData)
             ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state))
             ->set($this->db->quoteName('note') . '=' . $note)
@@ -140,14 +133,11 @@ class File extends Prism\Database\Table
     protected function updateObject()
     {
         $filename    = (!$this->filename) ? 'NULL' : $this->db->quote($this->filename);
-        $private     = (!$this->private) ? 'NULL' : $this->db->quote($this->private);
-        $public      = (!$this->public) ? 'NULL' : $this->db->quote($this->public);
         $note        = (!$this->note) ? 'NULL' : $this->db->quote($this->note);
 
         if (!$this->meta_data) {
             $metaData    = 'NULL';
         } else {
-
             if (is_array($this->meta_data)) {
                 $metaData = json_encode($this->meta_data);
                 $metaData = $this->db->quote($metaData);
@@ -162,8 +152,6 @@ class File extends Prism\Database\Table
             ->update($this->db->quoteName('#__identityproof_files'))
             ->set($this->db->quoteName('title') . '=' . $this->db->quote($this->title))
             ->set($this->db->quoteName('filename') . '=' . $filename)
-            ->set($this->db->quoteName('private') . '=' . $private)
-            ->set($this->db->quoteName('public') . '=' . $public)
             ->set($this->db->quoteName('meta_data') . '=' . $metaData)
             ->set($this->db->quoteName('state') . '=' . $this->db->quote($this->state))
             ->set($this->db->quoteName('note') . '=' . $note)
@@ -253,44 +241,6 @@ class File extends Prism\Database\Table
     }
 
     /**
-     * Return the private key.
-     *
-     * <code>
-     * $fileId  = 1;
-     *
-     * $file    = new Identityproof\File(\JFactory::getDbo());
-     * $file->load($fileId);
-     *
-     * $privateKey = $file->getPrivate();
-     * </code>
-     *
-     * @return mixed
-     */
-    public function getPrivate()
-    {
-        return $this->private;
-    }
-
-    /**
-     * Return the public key.
-     *
-     * <code>
-     * $fileId  = 1;
-     *
-     * $file    = new Identityproof\File(\JFactory::getDbo());
-     * $file->load($fileId);
-     *
-     * $publicKey = $file->getPublic();
-     * </code>
-     *
-     * @return mixed
-     */
-    public function getPublic()
-    {
-        return $this->public;
-    }
-
-    /**
      * Return the filename.
      *
      * <code>
@@ -346,6 +296,6 @@ class File extends Prism\Database\Table
      */
     public function getMetaData($index)
     {
-        return (array_key_exists($index, $this->meta_data)) ? $this->meta_data[$index] : null;
+        return array_key_exists($index, $this->meta_data) ? $this->meta_data[$index] : null;
     }
 }

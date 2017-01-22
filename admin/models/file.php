@@ -3,9 +3,11 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
+
+use Joomla\Utilities\ArrayHelper;
 
 // no direct access
 defined('_JEXEC') or die;
@@ -101,12 +103,12 @@ class IdentityproofModelFile extends JModelAdmin
      */
     public function save($data)
     {
-        $id          = Joomla\Utilities\ArrayHelper::getValue($data, 'id');
-        $title       = Joomla\Utilities\ArrayHelper::getValue($data, 'title');
-        $filename    = Joomla\Utilities\ArrayHelper::getValue($data, 'filename');
-        $state       = Joomla\Utilities\ArrayHelper::getValue($data, 'state');
-        $note        = Joomla\Utilities\ArrayHelper::getValue($data, 'note');
-        $userId      = Joomla\Utilities\ArrayHelper::getValue($data, 'user_id');
+        $id          = ArrayHelper::getValue($data, 'id');
+        $title       = ArrayHelper::getValue($data, 'title');
+        $filename    = ArrayHelper::getValue($data, 'filename');
+        $state       = ArrayHelper::getValue($data, 'state');
+        $note        = ArrayHelper::getValue($data, 'note');
+        $userId      = ArrayHelper::getValue($data, 'user_id');
 
         if (!$note) {
             $note = null;
@@ -136,7 +138,7 @@ class IdentityproofModelFile extends JModelAdmin
     public function changeState(&$pks, $value)
     {
         $pks = (array)$pks;
-        $pks = Joomla\Utilities\ArrayHelper::toInteger($pks);
+        $pks = ArrayHelper::toInteger($pks);
 
         if (!$pks) {
             return;

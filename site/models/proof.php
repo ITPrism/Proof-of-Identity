@@ -3,9 +3,13 @@
  * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
+
+use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
+use Defuse\Crypto;
 
 // no direct access
 defined('_JEXEC') or die;
@@ -44,7 +48,6 @@ class IdentityproofModelProof extends JModelForm
         // Load the parameters.
         $value = $app->getParams($this->option);
         $this->setState('params', $value);
-
     }
 
     /**
@@ -53,14 +56,14 @@ class IdentityproofModelProof extends JModelForm
      * @param   array   $data     An optional array of data for the form to interrogate.
      * @param   boolean $loadData True if the form is to load its own data (default case), false if not.
      *
-     * @return  JForm   A JForm object on success, false on failure
+     * @return  JForm|bool   A JForm object on success, false on failure
      * @since   1.6
      */
     public function getForm($data = array(), $loadData = true)
     {
         // Get the form.
         $form = $this->loadForm($this->option . '.proof', 'proof', array('control' => 'jform', 'load_data' => $loadData));
-        if (empty($form)) {
+        if (!$form) {
             return false;
         }
 
@@ -100,56 +103,50 @@ class IdentityproofModelProof extends JModelForm
             ->where('a.user_id = '. (int)$userId);
 
         $db->setQuery($query);
-        $results = (array)$db->loadAssocList();
 
-        return $results;
+        return (array)$db->loadAssocList();
     }
 
     /**
      * Upload the file.
      *
-     * @param array $tmpFile
+     * @param array $uploadedFileData
      *
      * @throws Exception
      *
      * @return array
      */
-    public function uploadFile($tmpFile)
+    public function uploadFile($uploadedFileData)
     {
-        jimport('joomla.filesystem.folder');
-        jimport('joomla.filesystem.file');
-
         $app = JFactory::getApplication();
         /** @var $app JApplicationSite */
 
-        $uploadedFile = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'tmp_name');
-        $uploadedName = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'name');
-        $errorCode    = Joomla\Utilities\ArrayHelper::getValue($tmpFile, 'error');
+        $uploadedFile = ArrayHelper::getValue($uploadedFileData, 'tmp_name');
+        $uploadedName = ArrayHelper::getValue($uploadedFileData, 'name');
+        $errorCode    = ArrayHelper::getValue($uploadedFileData, 'error');
 
         // Load parameters.
         $params     = JComponentHelper::getParams($this->option);
         /** @var  $params Joomla\Registry\Registry */
 
         // Generate a folder name.
-        $generatedName = Prism\Utilities\StringHelper::generateRandomString();
-        $destFolder = JPath::clean($app->get('tmp_path') . DIRECTORY_SEPARATOR . (string)$generatedName);
+        $generatedName      = Prism\Utilities\StringHelper::generateRandomString();
+        $destinationFolder  = JPath::clean($app->get('tmp_path') .'/'. (string)$generatedName, '/');
 
         // Create a temporary folder.
-        if (!JFolder::create($destFolder)) {
-            throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
+        if (!JFolder::create($destinationFolder, 0740)) {
+            throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FOLDER_CANNOT_BE_CREATED_S', $destinationFolder));
         }
 
         // Create .htaccess file to deny the access for that folder.
-        $htaccessFile = JPath::clean($destFolder . DIRECTORY_SEPARATOR . '.htaccess');
+        $htaccessFile = JPath::clean($destinationFolder . '/.htaccess', '/');
         $fileContent  = 'Deny from all';
         if (!JFile::write($htaccessFile, $fileContent)) {
-            throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
+            throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FILE_CANNOT_BE_CREATED_S', $htaccessFile));
         }
-
-        $file = new Prism\File\File();
-
+        
         // Prepare size validator.
-        $KB            = 1024 * 1024;
+        $KB            = pow(1024, 2);
         $fileSize      = (int)$app->input->server->get('CONTENT_LENGTH');
         $uploadMaxSize = $params->get('max_size') * $KB;
 
@@ -174,6 +171,7 @@ class IdentityproofModelProof extends JModelForm
 
         $typeValidator->setLegalExtensions($legalExtensions);
 
+        $file = new Prism\File\File($uploadedFile);
         $file
             ->addValidator($sizeValidator)
             ->addValidator($typeValidator)
@@ -185,37 +183,28 @@ class IdentityproofModelProof extends JModelForm
         }
 
         // Generate temporary file name
-        $ext = JFile::makeSafe(JFile::getExt($tmpFile['name']));
+        $filename = Prism\Utilities\StringHelper::generateRandomString(16);
+        
+        // Upload the file.
+        $filesystemOptions = new Registry;
+        $filesystemOptions->set('filename', $filename);
 
-        // Generate a file name.
-        $generatedName = Prism\Utilities\StringHelper::generateRandomString();
-        $tmpDestFile   = JPath::clean($destFolder . DIRECTORY_SEPARATOR . $generatedName . '.' . $ext);
+        $filesystemLocal = new Prism\Filesystem\Adapter\Local($destinationFolder);
+        $storedFile      = $filesystemLocal->upload($uploadedFileData, $filesystemOptions);
 
-        // Prepare uploader object.
-        $uploader = new Prism\File\Uploader\Local($uploadedFile);
-        $uploader->setDestination($tmpDestFile);
-
-        // Upload temporary file
-        $file->setUploader($uploader);
-
-        $file->upload();
-
-        // Get file
-        $tmpDestFile = JPath::clean($file->getFile());
-
-        if (!is_file($tmpDestFile)) {
+        if (!is_file($storedFile)) {
             throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
         }
 
         // Set new permissions for the file.
-        chmod($tmpDestFile, 0600);
+        chmod($storedFile, 0640);
 
-        // Remove the temporary file that came from the form.
+        // Remove the temporary folder.
         if (JFile::exists($uploadedFile)) {
             JFile::delete($uploadedFile);
         }
 
-        return $tmpDestFile;
+        return $storedFile;
     }
 
     /**
@@ -228,52 +217,36 @@ class IdentityproofModelProof extends JModelForm
      */
     public function save($data)
     {
-        $title     = Joomla\Utilities\ArrayHelper::getValue($data, 'title');
-        $file      = Joomla\Utilities\ArrayHelper::getValue($data, 'file');
-        $filename  = basename($file);
+        $title       = ArrayHelper::getValue($data, 'title');
+        $sourceFile  = ArrayHelper::getValue($data, 'file');
+        $filename    = basename($sourceFile);
 
-        $userId    = JFactory::getUser()->get('id');
+        $userId      = JFactory::getUser()->get('id');
 
-        if (!JFile::exists($file)) {
-            throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
+        if (!JFile::exists($sourceFile)) {
+            throw new RuntimeException(JText::_('COM_IDENTITYPROOF_ERROR_FILE_CANT_BE_UPLOADED'));
         }
 
-        // Load the data from the file.
-        $fileData = file_get_contents($file);
+        // Get mime type and file size.
+        $file     = new Prism\File\File($sourceFile);
+        $fileData = $file->extractFileData();
 
-        if ($fileData !== null and $fileData !== '') {
-            $keysData    = $this->generateKeys();
+        $metaData = json_encode(array(
+            'filesize'  => $fileData['filesize'],
+            'mime_type' => $fileData['mime']
+        ));
 
-            // Get mime type and file size.
-            $fileInfo = new finfo(FILEINFO_MIME_TYPE);
-            $metaData = array(
-                'filesize'  => filesize($file),
-                'mime_type' => $fileInfo->file($file)
-            );
+        $app             = JFactory::getApplication();
 
-            $fileData    = IdentityproofHelper::encrypt($keysData, $fileData);
+        $params          = JComponentHelper::getParams('com_identityproof');
+        $destinationFile = JPath::clean($params->get('files_path') .'/'. $filename, '/');
 
-            $params      = JComponentHelper::getParams('com_identityproof');
-            $destination = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $filename);
+        Crypto\File::encryptFileWithPassword($sourceFile, $destinationFile, $app->get('secret'));
 
-            file_put_contents($destination, $fileData);
-            JFile::delete($file);
-
-        } else {
-            $metaData  = null;
-            $keysData  = array();
+        // Remove the temporary folder.
+        if (JFile::exists($sourceFile)) {
+            JFile::delete($sourceFile);
         }
-
-        // Unset the file data and clean the memory.
-        $fileData    = null;
-
-        // Encode the options.
-        if ($metaData !== null and $metaData !== '') {
-            $metaData = json_encode($metaData);
-        }
-
-        // Remove the file.
-        JFile::delete($file);
 
         // Load a record from the database
         $row = $this->getTable();
@@ -283,8 +256,6 @@ class IdentityproofModelProof extends JModelForm
 
         $row->set('title', $title);
         $row->set('filename', $filename);
-        $row->set('private', (array_key_exists('private', $keysData)) ? $keysData['private'] : null);
-        $row->set('public', (array_key_exists('public', $keysData)) ? $keysData['public'] : null);
         $row->set('meta_data', $metaData);
         $row->set('user_id', $userId);
 
@@ -294,30 +265,6 @@ class IdentityproofModelProof extends JModelForm
         $this->triggerEventAfterSave($row, 'uploading', $isNew);
 
         return $row->get('id');
-    }
-
-    protected function generateKeys()
-    {
-        // Generate a password that will be used to encrypt the file.
-        $length   = mt_rand(16, 32);
-        $password = Prism\Utilities\StringHelper::generateRandomString($length);
-
-        // Generate a salt.
-        $length   = mt_rand(16, 32);
-        $salt     = Prism\Utilities\StringHelper::generateRandomString($length);
-
-        $options = array(
-            'salt'     => (string)$salt,
-            'password' => (string)$password
-        );
-
-        $chiper = new JCryptCipherRijndael256();
-        $key    = $chiper->generateKey($options);
-
-        return array(
-            'private'  => $key->private,
-            'public'   => $key->public
-        );
     }
 
     /**
@@ -333,7 +280,7 @@ class IdentityproofModelProof extends JModelForm
     {
         // Get properties
         $file = $table->getProperties();
-        $file = Joomla\Utilities\ArrayHelper::toObject($file);
+        $file = ArrayHelper::toObject($file);
 
         // Generate context
         $context = $this->option . '.' . $context;

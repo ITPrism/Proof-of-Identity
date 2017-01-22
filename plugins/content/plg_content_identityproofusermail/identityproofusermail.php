@@ -3,7 +3,7 @@
  * @package         IdentityProof
  * @subpackage      Plugins
  * @author          Todor Iliev
- * @copyright       Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright       Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license         GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -74,7 +74,6 @@ class plgContentIdentityProofUserMail extends JPlugin
             $ids = Joomla\Utilities\ArrayHelper::toInteger($ids);
 
             if (count($ids) > 0 and (int)$state === Prism\Constants::APPROVED) {
-
                 $users = new Identityproof\Users(JFactory::getDbo());
                 $users->load(array('ids' => $ids));
 
@@ -84,7 +83,6 @@ class plgContentIdentityProofUserMail extends JPlugin
                 }
 
                 foreach ($users as $user) {
-
                     // Send email to users.
                     $return = $this->sendMail($user, $emailId, 'user');
 
@@ -210,9 +208,7 @@ class plgContentIdentityProofUserMail extends JPlugin
 
         // Prepare data for parsing.
         switch ($type) {
-
             case 'file':
-
                 $user = JFactory::getUser($item->getUserId());
 
                 $data['user_name']      = $user->get('name');
@@ -242,7 +238,7 @@ class plgContentIdentityProofUserMail extends JPlugin
 
         // Log the error.
         if ($result !== true) {
-            JLog::add(JText::sprintf('PLG_CONTENT_IDENTITYPROOFUSERMAIL_ERROR_SEND_MAIL', $this->name));
+            JLog::add(JText::sprintf('PLG_CONTENT_IDENTITYPROOFUSERMAIL_ERROR_SEND_MAIL', $this->name), JLog::ERROR, 'com_identityproof');
             return false;
         }
 

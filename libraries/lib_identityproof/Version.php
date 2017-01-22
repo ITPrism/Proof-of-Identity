@@ -38,7 +38,7 @@ class Version
      *
      * @var integer
      */
-    public $devLevel = '2';
+    public $devLevel = '3';
 
     /**
      * Release Type
@@ -59,7 +59,7 @@ class Version
      *
      * @var string
      */
-    public $releaseDate = '12 April, 2016';
+    public $releaseDate = '19 January, 2017';
 
     /**
      * License
@@ -73,7 +73,7 @@ class Version
      *
      * @var string
      */
-    public $copyright = '&copy; 2016 ITPrism. All rights reserved.';
+    public $copyright = '&copy; 2017 ITPrism. All rights reserved.';
 
     /**
      * URL

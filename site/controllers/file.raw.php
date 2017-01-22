@@ -3,7 +3,7 @@
  * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -72,15 +72,12 @@ class IdentityproofControllerFile extends JControllerLegacy
         }
 
         try {
-
-            // Get the model
             $model = $this->getModel();
             /** @var $model IdentityproofModelFile */
 
             $model->remove($fileId, $userId);
 
         } catch (RuntimeException $e) {
-
             JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             $response
                 ->setTitle(JText::_('COM_IDENTITYPROOF_FAILURE'))
@@ -109,6 +106,8 @@ class IdentityproofControllerFile extends JControllerLegacy
     {
         // Check for request forgeries.
         JSession::checkToken('post') or jexit(JText::_('JINVALID_TOKEN'));
+
+        $app    = JFactory::getApplication();
         
         $user   = JFactory::getUser();
         
@@ -119,14 +118,14 @@ class IdentityproofControllerFile extends JControllerLegacy
 
         // Validate the user.
         if (!$userId) {
-            $this->setRedirect(JRoute::_('index.php?option=com_users&view=login', false), JText::_('COM_IDENTITYPROOF_ERROR_NOT_LOG_IN'));
+            $this->setRedirect(JRoute::_('index.php?option=com_users&view=login', false), JText::_('COM_IDENTITYPROOF_ERROR_NOT_LOG_IN'), 'warning');
             return;
         }
 
         // Validate the item owner.
         $validator = new Identityproof\Validator\File\Owner(JFactory::getDbo(), $fileId, $userId);
         if (!$validator->isValid()) {
-            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
+            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'), 'warning');
             return;
         }
 
@@ -134,7 +133,7 @@ class IdentityproofControllerFile extends JControllerLegacy
         $password = Joomla\Utilities\ArrayHelper::getValue($data, 'password', null, 'string');
         $match    = JUserHelper::verifyPassword($password, $user->get('password'), $userId);
         if (!$match) {
-            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_ITEM'));
+            $this->setRedirect(JRoute::_(IdentityproofHelperRoute::getProofRoute(), false), JText::_('COM_IDENTITYPROOF_ERROR_INVALID_PASSWORD'), 'warning');
             return;
         }
 
@@ -142,7 +141,6 @@ class IdentityproofControllerFile extends JControllerLegacy
         /** @var  $params Joomla\Registry\Registry */
 
         try {
-
             $keys = array(
                 'id' => $fileId,
                 'user_id' => $userId
@@ -152,17 +150,21 @@ class IdentityproofControllerFile extends JControllerLegacy
             $file = new Identityproof\File(JFactory::getDbo());
             $file->load($keys);
 
-            // Prepare keys.
-            $keys      = array(
-                'private' => $file->getPrivate(),
-                'public'  => $file->getPublic()
-            );
-
             // Decrypt the file.
-            $filePath   = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $file->getFilename());
+            $sourceFile         = JPath::clean($params->get('files_path') .'/'. $file->getFilename(), '/');
 
-            $output     = file_get_contents($filePath);
-            $output     = IdentityproofHelper::decrypt($keys, $output);
+            $generatedName      = Prism\Utilities\StringHelper::generateRandomString();
+            $destinationFolder  = JPath::clean($app->get('tmp_path') .'/'. (string)$generatedName, '/');
+            $destinationFile    = JPath::clean($destinationFolder .'/'. $file->getFilename(), '/');
+
+            // Create a temporary folder.
+            if (!JFolder::create($destinationFolder, 0740)) {
+                throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FOLDER_CANNOT_BE_CREATED_S', $destinationFolder));
+            }
+
+            Defuse\Crypto\File::decryptFileWithPassword($sourceFile, $destinationFile, $app->get('secret'));
+
+            $output       = file_get_contents($destinationFile);
 
             // Prepare meta data
 //            $fileSize   = $file->getMetaData('filesize');
@@ -172,8 +174,6 @@ class IdentityproofControllerFile extends JControllerLegacy
             JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception(JText::_('COM_IDENTITYPROOF_ERROR_SYSTEM'));
         }
-
-        $app = JFactory::getApplication();
 
         $app->setHeader('Content-Type', $mimeType, true);
         $app->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true);
@@ -192,6 +192,10 @@ class IdentityproofControllerFile extends JControllerLegacy
 
         $app->sendHeaders();
 
+        if (JFolder::exists($destinationFolder)) {
+            JFolder::delete($destinationFolder);
+        }
+        
         $app->close();
     }
 
@@ -233,13 +237,10 @@ class IdentityproofControllerFile extends JControllerLegacy
         }
 
         try {
-
-            // Get the model
             $model = $this->getModel();
             /** @var $model IdentityproofModelFile */
 
             $note = $model->getNote($fileId, $userId);
-
         } catch (Exception $e) {
             JLog::add($e->getMessage(), JLog::ERROR, 'com_identityproof');
             throw new Exception($e->getMessage());

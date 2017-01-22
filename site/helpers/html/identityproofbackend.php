@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -23,8 +23,6 @@ abstract class JHtmlIdentityproofBackend
 {
     public static function state($i, $value, $prefix, $checkbox = 'cb')
     {
-        JHtml::_('bootstrap.tooltip');
-
         if (!$value) { // Disapproved
             $task  = $prefix . 'verify';
             $title = 'COM_IDENTITYPROOF_VERIFY_USER';
@@ -42,12 +40,17 @@ abstract class JHtmlIdentityproofBackend
         return implode("\n", $html);
     }
 
-    public static function socialProfiles($socialProfiles, $id)
+    /**
+     * @param stdClass $item
+     *
+     * @return string
+     */
+    public static function socialProfiles($item)
     {
         $html = array();
 
-        if (array_key_exists($id, $socialProfiles)) {
-            $html[] = '<a class="btn btn-micro hasTooltip js-socialprofiles" href="javascript:void(0);" data-id="'.$id.'" title="' . htmlspecialchars(JText::_('COM_IDENTITYPROOF_REVIEW_SOCIAL_PROFILES'), ENT_COMPAT, 'UTF-8') . '">';
+        if ($item->hasProfiles) {
+            $html[] = '<a class="btn btn-micro hasTooltip js-socialprofiles" href="javascript:void(0);" data-id="'.$item->id.'" title="' . htmlspecialchars(JText::_('COM_IDENTITYPROOF_REVIEW_SOCIAL_PROFILES'), ENT_COMPAT, 'UTF-8') . '">';
             $html[] = '<i class="icon-eye"></i>';
             $html[] = '</a>';
         }
@@ -60,7 +63,6 @@ abstract class JHtmlIdentityproofBackend
         $html = array();
 
         if ($socialProfile->getLink()) {
-
             if ($socialProfile->getPicture()) {
                 $html[] = '<a href="'.$socialProfile->getLink().'" target="_blank">';
                 $html[] = '<img src="'.$socialProfile->getPicture().'"/>';
@@ -71,7 +73,6 @@ abstract class JHtmlIdentityproofBackend
             $html[] = $socialProfile->getName();
             $html[] = '</a>';
         } else {
-
             if ($socialProfile->getPicture()) {
                 $html[] = '<img src="'.$socialProfile->getPicture().'"/>';
             }
@@ -102,7 +103,6 @@ abstract class JHtmlIdentityproofBackend
         $html = array();
 
         switch ($value) {
-
             case 1: // Reviewed Successfully.
                 $task  = $prefix . 'pending';
                 $title = 'COM_IDENTITYPROOF_TOOLTIP_PENDING';

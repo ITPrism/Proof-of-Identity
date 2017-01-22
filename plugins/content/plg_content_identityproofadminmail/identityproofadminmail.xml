@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension version="3.5" type="plugin" group="content" method="upgrade">
+<extension version="3.6" type="plugin" group="content" method="upgrade">
     <name>PLG_CONTENT_IDENTITYPROOFADMINMAIL</name>
     <author>Todor Iliev</author>
-    <copyright>Copyright (C) 2016 Todor Iliev ( ITPrism.com ). All rights reserved.</copyright>
+    <copyright>Copyright (C) 2017 Todor Iliev ( ITPrism.com ). All rights reserved.</copyright>
     <license>http://www.gnu.org/copyleft/gpl.html GNU/GPLv3</license>
     <authorEmail>todor@itprism.com</authorEmail>
     <authorUrl>http://itprism.com</authorUrl>
-    <version>2.2</version>
-    <creationDate>12 April, 2016</creationDate>
+    <version>2.3</version>
+    <creationDate>19 January, 2017</creationDate>
     <description><![CDATA[
     <p>Proof of Identity Admin Mail is a plugin that sends notification mails to the administrator.</p>
     <p><a href="http://itprism.com/" target="_blank">Subscribe for the newsletter</a> to receive information about updates and new ITPrism extensions.</p>
@@ -24,14 +24,11 @@
     <config>
 		<fields name="params">
 			<fieldset name="basic" addfieldpath="/administrator/components/com_emailtemplates/models/fields">
-                
                 <field name="send_when_upload" type="emailtemplate" default="0" label="PLG_CONTENT_IDENTITYPROOFADMINMAIL_SEND_WHEN_UPLOAD" description="PLG_CONTENT_IDENTITYPROOFADMINMAIL_SEND_WHEN_UPLOAD_DESC" />
-
                 <field name="email_mode" type="list" default="html" label="PLG_CONTENT_IDENTITYPROOFADMINMAIL_EMAIL_MODE" description="PLG_CONTENT_IDENTITYPROOFADMINMAIL_EMAIL_MODE_DESC" >
                    <option value="plain">PLG_CONTENT_IDENTITYPROOFADMINMAIL_PLAIN</option>
                    <option value="html">PLG_CONTENT_IDENTITYPROOFADMINMAIL_HTML</option>
                 </field>
-                
 			</fieldset>
 	            
         </fields>

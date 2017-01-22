@@ -1,0 +1,1 @@
+ALTER TABLE `#__identityproof_files` DROP `private`, DROP `public`;

@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -85,11 +85,11 @@ class IdentityproofViewFiles extends JViewLegacy
     protected function addToolbar()
     {
         // Set toolbar items for the page
-        JToolBarHelper::title(JText::_('COM_IDENTITYPROOF_FILES_MANAGER'));
+        JToolbarHelper::title(JText::_('COM_IDENTITYPROOF_FILES_MANAGER'));
         JToolbarHelper::editList('file.edit');
         JToolbarHelper::divider();
-        JToolBarHelper::custom('files.reviewed', 'ok', '', JText::_('COM_IDENTITYPROOF_REVIEWED'), false);
-        JToolBarHelper::custom('files.pending', 'clock', '', JText::_('COM_IDENTITYPROOF_PENDING'), false);
+        JToolbarHelper::custom('files.reviewed', 'ok', '', JText::_('COM_IDENTITYPROOF_REVIEWED'), false);
+        JToolbarHelper::custom('files.pending', 'clock', '', JText::_('COM_IDENTITYPROOF_PENDING'), false);
         JToolbarHelper::divider();
 
         if ((int)$this->state->get('filter.state') === -2) {
@@ -99,7 +99,7 @@ class IdentityproofViewFiles extends JViewLegacy
         }
 
         JToolbarHelper::divider();
-        JToolBarHelper::custom('files.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
+        JToolbarHelper::custom('files.backToDashboard', 'dashboard', '', JText::_('COM_IDENTITYPROOF_DASHBOARD'), false);
     }
 
     /**
@@ -117,10 +117,10 @@ class IdentityproofViewFiles extends JViewLegacy
         JHtml::_('bootstrap.tooltip');
         JHtml::_('formbehavior.chosen', 'select');
 
-        JHtml::_('prism.ui.pnotify');
-        JHtml::_('prism.ui.joomlaHelper');
-        JHtml::_('prism.ui.joomlaList');
+        JHtml::_('Prism.ui.pnotify');
+        JHtml::_('Prism.ui.joomlaHelper');
+        JHtml::_('Prism.ui.joomlaList');
 
-        $this->document->addScript(JURI::root() . 'media/' . $this->option . '/js/admin/' . JString::strtolower($this->getName()) . '.js');
+        $this->document->addScript(JUri::root() . 'media/' . $this->option . '/js/admin/' . strtolower($this->getName()) . '.js');
     }
 }

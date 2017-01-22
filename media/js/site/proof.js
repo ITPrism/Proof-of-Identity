@@ -45,98 +45,148 @@ jQuery(document).ready(function() {
                     data: fields,
                     dataType: "text json"
                 }).done(function (response) {
-
-                        if (response.success) {
-                            jQuery("#js-ipfile" + response.data.file_id).remove();
-                            PrismUIHelper.displayMessageSuccess(response.title, response.text);
-                        } else {
-                            PrismUIHelper.displayMessageFailure(response.title, response.text);
-                        }
-
-                    }
-                );
-            }
-        }
-    });
-
-    // Set a "click" even for "Download" buttons.
-    $fileList.on("click", ".js-ipfile-btn-download", function(event){
-        event.preventDefault();
-
-        jQuery('#js-iproof-modal').modal('show');
-
-        var fileId = jQuery(this).data("file-id");
-
-        jQuery.ajax({
-            url: "index.php?option=com_identityproof&view=download&format=raw&id="+parseInt(fileId),
-            type: "GET",
-            dataType: "html"
-        }).done(function (response) {
-
-                if (response) {
-                    jQuery("#js-iproof-modal").find(".modal-body").html(response);
-                }
-
-            }
-        );
-    });
-
-    // Hide the modal when click on the button "Cancel".
-    jQuery('#js-iproof-btn-modal-cancel').on("click", function(event) {
-        event.preventDefault();
-        jQuery('#js-iproof-modal').modal('hide');
-    });
-
-    // Submit the form when click on the button "Submit".
-    jQuery('#js-iproof-btn-modal-submit').on("click", function(event) {
-        event.preventDefault();
-
-        var password = jQuery("#jform_password").val();
-
-        // If there is a password, submit the form.
-        // Hide the model if there is no a password.
-        if (password) {
-            jQuery('#ipDownloadForm').submit();
-        } else {
-            jQuery('#js-iproof-modal').modal('hide');
-        }
-
-    });
-
-    // Hide the modal when submit the form.
-    jQuery('#js-iproof-modal').on("submit", "#ipDownloadForm", function(){
-        jQuery('#js-iproof-modal').modal('hide');
-    });
-
-    // Set a "click" even for "Notification" buttons.
-    $fileList.on("click", ".js-iproof-btn-note", function(event){
-        event.preventDefault();
-
-        jQuery('#js-iproof-modal-note').modal('show');
-
-        var fileId = jQuery(this).data("file-id");
-
-        if (fileId > 0) {
-            jQuery.ajax({
-                url: "index.php?option=com_identityproof&task=file.note&format=raw&id=" + parseInt(fileId),
-                type: "get",
-                dataType: "text json"
-            }).done(function (response) {
-
-                    if (!response.success) {
-                        PrismUIHelper.displayMessageFailure(response.title, response.text);
+                    if (response.success) {
+                        jQuery("#js-ipfile" + response.data.file_id).remove();
+                        PrismUIHelper.displayMessageSuccess(response.title, response.text);
                     } else {
-                        jQuery("#js-iproof-modal-note").find(".modal-body").text(response.data.note);
+                        PrismUIHelper.displayMessageFailure(response.title, response.text);
                     }
-
-                }
-            );
+                });
+            }
         }
     });
 
-    // Hide the modal when click on the button "Close".
-    jQuery('#js-iproof-btn-modal-note-close').on("click", function(event) {
-        event.preventDefault();
-        jQuery('#js-iproof-modal-note').modal('hide');
-    });
+    var downloadManager = {
+
+        modal:  {},
+        modalBody:  {},
+        modalBtnSubmit:  {},
+        modalBtnClose:  {},
+
+        init: function() {
+            this.modal          = jQuery('#js-iproof-modal').remodal();
+            this.modalBody      = jQuery('#js-iproof-modal-download-body');
+            this.modalBtnSubmit = jQuery('#js-iproof-btn-modal-submit');
+            this.modalBtnClose  = jQuery('#js-iproof-btn-modal-cancel');
+
+            this.initModal();
+            this.initFormSubmit();
+            this.initButtonClose();
+        },
+
+        initModal: function() {
+
+            var $this = this;
+
+            // Set a "click" even for "Download" buttons.
+            $fileList.on("click", ".js-ipfile-btn-download", function(event){
+                event.preventDefault();
+
+                $this.modal.open();
+
+                var fileId = jQuery(this).data("file-id");
+
+                jQuery.ajax({
+                    url: "index.php?option=com_identityproof&view=download&format=raw&id="+parseInt(fileId),
+                    type: "GET",
+                    dataType: "html"
+                }).done(function (response) {
+                    if (response) {
+                        $this.modalBody.html(response);
+                    }
+                });
+            });
+        },
+
+        initButtonClose: function() {
+
+            var $this = this;
+
+            this.modalBtnClose.on("click", function() {
+                $this.modal.close();
+            });
+        },
+
+        initFormSubmit: function() {
+
+            var $this = this;
+
+            // Hide the modal when submit the form.
+            jQuery(this.modalBody).on("submit", "#ipDownloadForm", function(){
+                $this.modal.close();
+            });
+
+            // Submit the form when click on the button "Submit".
+            this.modalBtnSubmit.on("click", function(event) {
+                event.preventDefault();
+
+                var form     = jQuery('#ipDownloadForm');
+                var password = form.find("#jform_password").val();
+
+                // If there is a password, submit the form.
+                // Hide the model if there is no a password.
+                if (password) {
+                    form.submit();
+                } else {
+                    $this.modal.close();
+                }
+            });
+        }
+    };
+
+    var noteManager = {
+
+        modal:  {},
+        modalBody:  {},
+        modalBtnClose:  {},
+
+        init: function() {
+            this.modal          = jQuery('#js-iproof-modal-note').remodal();
+            this.modalBody      = jQuery('#js-iproof-modal-body');
+            this.modalBtnClose  = jQuery('#js-iproof-btn-note-close');
+
+            this.initModal();
+            this.initButtonClose();
+        },
+
+        initModal: function() {
+
+            var $this = this;
+
+            // Set a "click" even for "Notification" buttons.
+            $fileList.on("click", ".js-iproof-btn-note", function(event){
+                event.preventDefault();
+
+                var fileId = jQuery(this).data("file-id");
+
+                if (fileId > 0) {
+                    jQuery.ajax({
+                        url: "index.php?option=com_identityproof&task=file.note&format=raw&id=" + parseInt(fileId),
+                        type: "get",
+                        dataType: "text json"
+                    }).done(function (response) {
+                        if (!response.success) {
+                            PrismUIHelper.displayMessageFailure(response.title, response.text);
+                        } else {
+                            $this.modalBody.text(response.data.note);
+                            $this.modal.open();
+                        }
+                    });
+                }
+            });
+        },
+
+        initButtonClose: function() {
+
+            var $this = this;
+
+            this.modalBtnClose.on("click", function(event) {
+                event.preventDefault();
+                $this.modal.close();
+            });
+        }
+    };
+
+    downloadManager.init();
+    noteManager.init();
 });

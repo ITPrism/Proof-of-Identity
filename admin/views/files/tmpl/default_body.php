@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -11,13 +11,13 @@
 defined('_JEXEC') or die;
 ?>
 <?php foreach ($this->items as $i => $item) {
-    $stateClass = ($item->state != 1) ? "" : "success";?>
+    $stateClass = (int)$item->state === 1 ? 'success' : '';?>
     <tr class="row<?php echo $i % 2; ?> <?php echo $stateClass; ?>">
         <td class="center hidden-phone">
             <?php echo JHtml::_('grid.id', $i, $item->id); ?>
         </td>
         <td class="center">
-            <?php echo JHtml::_('identityproofbackend.filestate', $i, $item->state, "files."); ?>
+            <?php echo JHtml::_('identityproofbackend.filestate', $i, $item->state, 'files.'); ?>
         </td>
         <td>
             <a href="<?php echo JRoute::_('index.php?option=com_identityproof&view=file&layout=edit&id=' . $item->id); ?>">

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<extension type="package" version="3.5" method="upgrade">
+<extension type="package" version="3.6" method="upgrade">
 	<name>Proof of Identity Package</name>
 	<packagename>identityproof</packagename>
 	<author>Todor Iliev</author>
     <authorEmail>todor@itprism.com</authorEmail>
     <authorUrl>http://itprism.com</authorUrl>
-    <copyright>Copyright (C) 2016 Todor Iliev ( ITPrism.com )</copyright>
+    <copyright>Copyright (C) 2017 Todor Iliev ( ITPrism.com )</copyright>
     <license>http://www.gnu.org/licenses/gpl-3.0.en.html GNU/GPLv3</license>
-    <version>2.2</version>
-    <creationDate>12 April, 2016</creationDate>
+    <version>2.3</version>
+    <creationDate>19 January, 2017</creationDate>
     <url>http://itprism.com</url>
 	<packager>Todor Iliev</packager>
 	<packagerurl>http://itprism.com</packagerurl>
@@ -30,6 +30,7 @@
 	<scriptfile>install.php</scriptfile>
 
     <updateservers>
-        <server type="extension" priority="1" name="Proof of Identity (from CDN)">http://cdn.itprism.com/updates/identityproof.xml</server>
-    </updateservers>
+        <server type="extension" priority="1" name="Proof of Identity Package">http://cdn.itprism.com/updates/identityproof/package.xml</server>
+		<server type="extension" priority="2" name="Proof of Identity Package">http://cdn.itprism.com/updates/identityproof.xml</server>
+	</updateservers>
 </extension>

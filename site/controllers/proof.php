@@ -3,7 +3,7 @@
  * @package      Identityproof
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -81,8 +81,6 @@ class IdentityproofControllerProof extends Prism\Controller\Form\Frontend
         }
 
         try {
-
-            // Upload image
             if (!empty($file['name'])) {
                 $file = $model->uploadFile($file);
                 if ($file !== null and $file !== '') {
@@ -91,7 +89,6 @@ class IdentityproofControllerProof extends Prism\Controller\Form\Frontend
             }
 
             $model->save($validData);
-
         } catch (RuntimeException $e) {
             $this->displayWarning($e->getMessage(), $redirectOptions);
             return;

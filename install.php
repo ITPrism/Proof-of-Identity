@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -87,14 +87,13 @@ class pkg_identityproofInstallerScript
         jimport('Identityproof.init');
 
         if (!$params->get('files_path')) {
-
             $folder = IdentityproofInstallHelper::generateFolderName();
 
-            $filesFolder = JPath::clean(JPATH_ROOT . DIRECTORY_SEPARATOR . $folder);
+            $filesFolder = JPath::clean(JPATH_ROOT .'/'. $folder, '/');
             IdentityproofInstallHelper::createFolder($filesFolder);
 
         } else {
-            $filesFolder = JPath::clean($params->get('files_path'));
+            $filesFolder = JPath::clean($params->get('files_path'), '/');
         }
 
         // Start table with the information
@@ -188,14 +187,12 @@ class pkg_identityproofInstallerScript
         IdentityproofInstallHelper::addRow($title, $result, $info);
         
         // Display result about verification of installed Prism Library
-        // Display result about verification of installed ITPrism Library
         $info  = '';
         if (!class_exists('Prism\\Version')) {
             $title  = JText::_('COM_IDENTITYPROOF_PRISM_LIBRARY');
             $info   = JText::_('COM_IDENTITYPROOF_PRISM_LIBRARY_DOWNLOAD');
             $result = array('type' => 'important', 'text' => JText::_('JNO'));
         } else {
-
             $prismVersion   = new Prism\Version();
             $text           = JText::sprintf('COM_IDENTITYPROOF_CURRENT_V_S', $prismVersion->getShortVersion());
 
@@ -245,7 +242,6 @@ class pkg_identityproofInstallerScript
         if (!class_exists('Prism\\Version')) {
             echo JText::_('COM_IDENTITYPROOF_MESSAGE_INSTALL_PRISM_LIBRARY');
         } else {
-
             if (class_exists('Identityproof\\Version')) {
                 $prismVersion     = new Prism\Version();
                 $componentVersion = new Identityproof\Version();

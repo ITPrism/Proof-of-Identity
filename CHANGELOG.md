@@ -1,6 +1,12 @@
 Proof Of Identity Changelog
 ===============================
 
+###v2.3
+* Improved usability.
+* It was made to use the new version of [Defuse\Crypto](https://github.com/defuse/php-encryption) during the process of encrypting files.
+* It was made compatible with Prism Library v2.18.
+* The modals were replaced with [ReModal](http://vodkabears.github.io/remodal/) on the front-end.
+
 ###v2.2
 * Replaced Glyphicons with Font Awesome.
 * It was done to be compatible with Prism Library 1.9.
@@ -13,7 +19,7 @@ Proof Of Identity Changelog
 * Added option to send mails when the administrator leave a note to a file.
 
 ###v2.0
-* Done to be based on Bootstrap 3.x
+* Now, it is based based on Bootstrap 3.x
 * Refactored the library.
 * Included plug-ins that send mails to the administrator and users. They send mails when a user uploads a file or the administrator verifies a user.
 * Added update server. Now, it is possible to upgrade the Proof of Identity via Joomla! updater.

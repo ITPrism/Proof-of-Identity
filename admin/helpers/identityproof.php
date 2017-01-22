@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -49,41 +49,5 @@ class IdentityproofHelper
             'index.php?option=com_plugins&view=plugins&filter_search=' . rawurlencode('proof'),
             $vName === 'plugins'
         );
-    }
-
-    /**
-     * Encrypt data.
-     *
-     * @param array $keys That must be an array that contains private and public keys.
-     * @param mixed $data The data that has to be encrypted.
-     *
-     * @return mixed
-     */
-    public static function encrypt(array $keys, $data)
-    {
-        $chiper = new JCryptCipherRijndael256();
-        $key    = new JCryptKey('rijndael256', $keys['private'], $keys['public']);
-
-        $crypt  = new JCrypt($chiper, $key);
-
-        return $crypt->encrypt($data);
-    }
-
-    /**
-     * Decrypt data.
-     *
-     * @param array $keys That must be an array that contains private and public keys.
-     * @param mixed $data Encrypted data that has to be decrypted.
-     *
-     * @return mixed
-     */
-    public static function decrypt(array $keys, $data)
-    {
-        $chiper = new JCryptCipherRijndael256();
-        $key    = new JCryptKey('rijndael256', $keys['private'], $keys['public']);
-
-        $crypt  = new JCrypt($chiper, $key);
-
-        return $crypt->decrypt($data);
     }
 }

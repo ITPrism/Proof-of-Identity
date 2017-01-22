@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Plugins
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -36,7 +36,6 @@ class plgUserIdentityProof extends JPlugin
         $days = (int)$this->params->get('days', 14);
 
         if ($days > 0) {
-
             $today = new JDate();
             $today->modify('- ' .(int)$days . ' days');
 
@@ -53,14 +52,13 @@ class plgUserIdentityProof extends JPlugin
             $results = (array)$db->loadColumn();
 
             if (count($results) > 0) {
-
                 $params = JComponentHelper::getParams('com_identityproof');
                 /** @var  $params Joomla\Registry\Registry */
 
                 // Remove old key files
                 jimport('joomla.filesystem.file');
                 foreach ($results as $filename) {
-                    $file = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $filename);
+                    $file = JPath::clean($params->get('files_path') .'/'. $filename, '/');
                     if (JFile::exists($file)) {
                         JFile::delete($file);
                     }
@@ -75,7 +73,6 @@ class plgUserIdentityProof extends JPlugin
                 $db->setQuery($query);
                 $db->execute();
             }
-
         }
 
         return true;

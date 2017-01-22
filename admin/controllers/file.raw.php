@@ -3,7 +3,7 @@
  * @package      Identityproof
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -39,7 +39,9 @@ class IdentityproofControllerFile extends JControllerLegacy
     {
         // Check for request forgeries.
         JSession::checkToken('post') or jexit(JText::_('JINVALID_TOKEN'));
-        
+
+        $app    = JFactory::getApplication();
+
         $fileId   = $this->input->post->get('file_id', 0, 'int');
         $userId   = JFactory::getUser()->get('id');
 
@@ -53,26 +55,29 @@ class IdentityproofControllerFile extends JControllerLegacy
         /** @var  $params Joomla\Registry\Registry */
 
         try {
-
             // Load file data.
             $file = new Identityproof\File(JFactory::getDbo());
             $file->load($fileId);
-
-            // Prepare keys.
-            $keys      = array(
-                'private' => $file->getPrivate(),
-                'public'  => $file->getPublic()
-            );
 
             // Prepare meta data
 //            $fileSize   = $file->getMetaData('filesize');
             $mimeType   = $file->getMetaData('mime_type');
 
             // Decrypt the file.
-            $filePath   = JPath::clean($params->get('files_path') . DIRECTORY_SEPARATOR . $file->getFilename());
-            $output     = file_get_contents($filePath);
+            $sourceFile         = JPath::clean($params->get('files_path') .'/'. $file->getFilename(), '/');
 
-            $output     = IdentityproofHelper::decrypt($keys, $output);
+            $generatedName      = Prism\Utilities\StringHelper::generateRandomString();
+            $destinationFolder  = JPath::clean($app->get('tmp_path') .'/'. (string)$generatedName, '/');
+            $destinationFile    = JPath::clean($destinationFolder .'/'. $file->getFilename(), '/');
+
+            // Create a temporary folder.
+            if (!JFolder::create($destinationFolder, 0740)) {
+                throw new RuntimeException(JText::sprintf('COM_IDENTITYPROOF_ERROR_FOLDER_CANNOT_BE_CREATED_S', $destinationFolder));
+            }
+
+            Defuse\Crypto\File::decryptFileWithPassword($sourceFile, $destinationFile, $app->get('secret'));
+
+            $output = file_get_contents($destinationFile);
 
         } catch (Exception $e) {
             JLog::add($e->getMessage());
@@ -97,6 +102,10 @@ class IdentityproofControllerFile extends JControllerLegacy
         $doc->setMimeEncoding($mimeType);
 
         $app->sendHeaders();
+
+        if (JFolder::exists($destinationFolder)) {
+            JFolder::delete($destinationFolder);
+        }
 
         $app->close();
     }

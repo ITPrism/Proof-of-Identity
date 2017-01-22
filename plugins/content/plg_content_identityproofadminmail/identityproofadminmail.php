@@ -3,7 +3,7 @@
  * @package         IdentityProof
  * @subpackage      Plugins
  * @author          Todor Iliev
- * @copyright       Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright       Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license         GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -75,7 +75,6 @@ class plgContentIdentityProofAdminMail extends JPlugin
         }
 
         if ($file->id > 0 and $isNew) {
-
             // Send email to the administrator.
             $return = $this->sendMail($file, $emailId);
 

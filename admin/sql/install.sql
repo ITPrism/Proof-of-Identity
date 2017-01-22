@@ -16,8 +16,6 @@ CREATE TABLE IF NOT EXISTS `#__identityproof_files` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
   `filename` varchar(32) DEFAULT NULL,
-  `private` blob,
-  `public` blob,
   `meta_data` varchar(255) DEFAULT NULL,
   `state` tinyint(4) NOT NULL DEFAULT '0',
   `note` varchar(255) DEFAULT NULL,
@@ -58,4 +56,3 @@ CREATE TABLE IF NOT EXISTS `#__identityproof_users` (
   `state` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-

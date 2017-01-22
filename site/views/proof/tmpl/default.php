@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
         <h1><?php echo $this->escape($this->params->get('page_heading')); ?></h1>
     <?php } ?>
 
-    <?php if($this->params->get('display_https_warning', 1) and !$this->uri->isSSL()) {?>
+    <?php if ($this->params->get('display_https_warning', 1) and !$this->uri->isSSL()) {?>
         <div class="alert alert-warning">
             <p>
                 <span class="fa fa-exclamation-triangle"></span>
@@ -24,7 +24,7 @@ defined('_JEXEC') or die;
         </div>
     <?php } ?>
 
-    <?php if($this->params->get('display_status', 1)) {?>
+    <?php if ($this->params->get('display_status', 1)) {?>
         <div class="alert alert-info">
             <?php if ($this->user->isVerified()) {?>
             <p>
@@ -59,7 +59,7 @@ defined('_JEXEC') or die;
                             <?php echo $this->form->getLabel('file'); ?>
                             <?php echo $this->form->getInput('file'); ?>
                         </div>
-                        <p class="help-block-xsmall"><?php echo JText::sprintf('COM_IDENTITYPROOF_FILE_TYPES_NOTE', $this->params->get('legal_extensions')); ?> <?php echo JText::sprintf('COM_IDENTITYPROOF_FILE_SIZE_NOTE_D', $this->maxFileSize); ?></p>
+                        <p class="help-block"><?php echo JText::sprintf('COM_IDENTITYPROOF_FILE_TYPES_NOTE', $this->params->get('legal_extensions')); ?> <?php echo JText::sprintf('COM_IDENTITYPROOF_FILE_SIZE_NOTE_D', $this->maxFileSize); ?></p>
 
                         <?php if ($this->params->get('display_note', 0)) { ?>
                             <div class="alert alert-info mt-5">
@@ -67,7 +67,7 @@ defined('_JEXEC') or die;
                                     <span class="fa fa-info-circle"></span>
                                     <?php echo JText::_('COM_IDENTITYPROOF_INFORMATION'); ?>
                                 </h4>
-                                <?php if($this->params->get('additional_information', 0)) { ?>
+                                <?php if ($this->params->get('additional_information', 0)) { ?>
                                     <p><?php echo $this->escape($this->params->get('additional_information')); ?></p>
                                 <?php } ?>
                             </div>
@@ -103,7 +103,7 @@ defined('_JEXEC') or die;
                         <td class="center hidden-xs"><?php echo JHtml::_('date', $file['record_date'], JText::_('DATE_FORMAT_LC3')); ?></td>
                         <td class="center">
                             <?php echo JHtml::_('identityproof.state', $file['state']); ?>
-                            <?php if (!empty($file["note"])) { ?>
+                            <?php if (!empty($file['note'])) { ?>
                                 <?php echo JHtml::_('identityproof.note', $file['id']); ?>
                             <?php } ?>
 

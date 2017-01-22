@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Component
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -119,7 +119,6 @@ class IdentityproofModelUsers extends JModelList
         // Filter by search in title
         $search = (string)$this->getState('filter.search');
         if ($search !== '') {
-
             if (stripos($search, 'id:') === 0) {
                 $query->where('a.id = ' . (int)substr($search, 3));
             } else {
@@ -162,39 +161,5 @@ class IdentityproofModelUsers extends JModelList
             $db->setQuery($query);
             $db->execute();
         }
-    }
-
-    /**
-     * Prepare social profiles.
-     *
-     * @param array $items
-     *
-     * @return array
-     */
-    public function getSocialProfiles($items)
-    {
-        $results = array();
-        $ids     = array();
-
-        foreach ($items as $item) {
-            $ids[] = $item->id;
-        }
-
-        if (count($ids) > 0) {
-            $db     = $this->getDbo();
-            $query  = $db->getQuery(true);
-
-            $query
-                ->select('a.user_id, a.facebook_id, b.twitter_id, c.google_id')
-                ->from($db->quoteName('#__identityproof_facebook', 'a'))
-                ->leftJoin($db->quoteName('#__identityproof_twitter', 'b') . ' ON a.user_id = b.user_id')
-                ->leftJoin($db->quoteName('#__identityproof_google', 'c') . ' ON a.user_id = c.user_id')
-                ->where('a.user_id IN (' . implode(',', $ids) . ')');
-
-            $db->setQuery($query);
-            $results = $db->loadAssocList('user_id');
-        }
-
-        return $results;
     }
 }

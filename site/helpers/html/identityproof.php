@@ -3,7 +3,7 @@
  * @package      ProofOfIdentity
  * @subpackage   Components
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2016 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
  * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
@@ -33,10 +33,9 @@ abstract class JHtmlIdentityproof
      */
     public static function state($value, $iconPending = 'fa-clock-o', $iconOk = 'fa-check-circle', $iconWarning = 'fa-trash')
     {
-        $html = '<button class="btn btn-default btn-xs hasTooltip" title="{TITLE}"><span class="fa {ICON}"></span></button>';
+        $html = '<button class="btn btn-default btn-xs hasPopover" data-content="{TITLE}"><span class="fa {ICON}"></span></button>';
 
         switch ($value) {
-
             case 1: // Reviewed Successfully.
                 $html = str_replace('{ICON}', $iconOk, $html);
                 $html = str_replace('{TITLE}', JText::_('COM_IDENTITYPROOF_TOOLTIP_REVIEWED'), $html);
@@ -54,7 +53,6 @@ abstract class JHtmlIdentityproof
         }
 
         return $html;
-
     }
 
     /**
@@ -67,7 +65,7 @@ abstract class JHtmlIdentityproof
     public static function note($fileId)
     {
         $html = '
-        <button class="btn btn-default btn-xs hasTooltip js-iproof-btn-note" data-file-id="'.(int)$fileId.'" title="'.JText::_('COM_IDENTITYPROOF_TOOLTIP_NOTE_BUTTON').'">
+        <button class="btn btn-default btn-xs hasPopover js-iproof-btn-note" data-file-id="'.(int)$fileId.'" data-content="'.JText::_('COM_IDENTITYPROOF_TOOLTIP_NOTE_BUTTON').'">
             <span class="fa fa-envelope"></span>
         </button>
         ';

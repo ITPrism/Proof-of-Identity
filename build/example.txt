@@ -1,5 +1,6 @@
-cfg.name=userideas
-cfg.versionDir=v1.0
+cfg.name=identityproof
+cfg.version=v2.3
+cfg.joomlaVersion=J3.6
 cfg.buildDir=packages
 cfg.sourceDir=/path/...
 cfg.pkgDir=/path/.../pkg_userideas
