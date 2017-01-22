@@ -101,7 +101,7 @@ class Version
      *
      * @var string
      */
-    public $requiredPrismVersion = '1.10';
+    public $requiredPrismVersion = '1.18';
 
     /**
      * Build long format of the version text

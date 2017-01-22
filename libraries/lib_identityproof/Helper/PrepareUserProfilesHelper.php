@@ -50,7 +50,6 @@ class PrepareUserProfilesHelper implements HelperInterface
             $userIds = ArrayHelper::getIds($data, 'user_id');
 
             $query1 = $this->db->getQuery(true);
-
             $query1
                 ->select('id, user_id')
                 ->from($this->db->quoteName('#__identityproof_facebook'))
