@@ -1,6 +1,9 @@
 Proof Of Identity Changelog
 ===============================
 
+###v2.3.1
+* Fixed files path creation during the process of installation.
+
 ###v2.3
 * Improved usability.
 * It was made to use the new version of [Defuse\Crypto](https://github.com/defuse/php-encryption) during the process of encrypting files.

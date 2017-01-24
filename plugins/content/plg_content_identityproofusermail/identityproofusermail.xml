@@ -6,8 +6,8 @@
     <license>http://www.gnu.org/copyleft/gpl.html GNU/GPLv3</license>
     <authorEmail>todor@itprism.com</authorEmail>
     <authorUrl>http://itprism.com</authorUrl>
-    <version>2.3</version>
-    <creationDate>19 January, 2017</creationDate>
+    <version>2.3.1</version>
+    <creationDate>24 January, 2017</creationDate>
     <description><![CDATA[
     <p>Proof of Identity User Mail is a plugin that sends confirmation mails to users.</p>
     <p><a href="http://itprism.com/" target="_blank">Subscribe for the newsletter</a> to receive information about updates and new ITPrism extensions.</p>

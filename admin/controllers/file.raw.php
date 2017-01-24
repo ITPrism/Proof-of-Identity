@@ -60,7 +60,6 @@ class IdentityproofControllerFile extends JControllerLegacy
             $file->load($fileId);
 
             // Prepare meta data
-//            $fileSize   = $file->getMetaData('filesize');
             $mimeType   = $file->getMetaData('mime_type');
 
             // Decrypt the file.

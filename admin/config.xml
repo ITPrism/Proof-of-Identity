@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <fieldset name="basic" label="COM_IDENTITYPROOF_BASIC">
-        <field name="files_path" type="text" default="D:\xampp\htdocs\crowdfunding2\ip29a024eed6e" label="COM_IDENTITYPROOF_FILES_DIRECTORY" description="COM_IDENTITYPROOF_FILES_DIRECTORY_DESC" class="input-xxlarge"/>
-        
-        <field name="legal_extensions" type="text" default="jpg, jpeg, png, pdf"
-               label="COM_IDENTITYPROOF_LEGAL_EXTENSIONS" description="COM_IDENTITYPROOF_LEGAL_EXTENSIONS_DESC"
-               class="input-xxlarge"/>
-
-        <field name="legal_types" type="textarea" default="image/png, application/png, application/x-png,image/jpeg, image/jpg, application/jpg, application/x-jpg, image/pipeg, image/pjpeg, image/vnd.swiftview-jpeg, application/pdf, application/x-pdf, application/acrobat, applications/vnd.pdf, text/pdf, text/x-pdf"
-               label="COM_IDENTITYPROOF_LEGAL_MIME_TYPES" description="COM_IDENTITYPROOF_LEGAL_MIME_TYPES_DESC"
-               class="input-xxlarge"/>
-
-        <field name="max_size" type="text" default="5"
-               label="COM_IDENTITYPROOF_MAX_SIZE_MB" description="COM_IDENTITYPROOF_MAX_SIZE_MB_DESC"
-               class="input-mini"/>
-
+        <field name="files_path" type="text" default="{FILES_PATH}" label="COM_IDENTITYPROOF_FILES_DIRECTORY" description="COM_IDENTITYPROOF_FILES_DIRECTORY_DESC" class="input-xxlarge" hint="/home/user123/public_html/secretFolder34567" />
+        <field name="legal_extensions" type="text" default="jpg, jpeg, png, pdf" label="COM_IDENTITYPROOF_LEGAL_EXTENSIONS" description="COM_IDENTITYPROOF_LEGAL_EXTENSIONS_DESC" class="input-xxlarge"/>
+        <field name="legal_types" type="textarea" default="image/png, application/png, application/x-png,image/jpeg, image/jpg, application/jpg, application/x-jpg, image/pipeg, image/pjpeg, image/vnd.swiftview-jpeg, application/pdf, application/x-pdf, application/acrobat, applications/vnd.pdf, text/pdf, text/x-pdf" label="COM_IDENTITYPROOF_LEGAL_MIME_TYPES" description="COM_IDENTITYPROOF_LEGAL_MIME_TYPES_DESC" class="input-xxlarge"/>
+        <field name="max_size" type="text" default="5" label="COM_IDENTITYPROOF_MAX_SIZE_MB" description="COM_IDENTITYPROOF_MAX_SIZE_MB_DESC" class="input-mini"/>
     </fieldset>
 
     <fieldset name="advanced" label="COM_IDENTITYPROOF_ADVANCED">
@@ -37,5 +27,4 @@
         </field>
         <field name="administrator_id" type="user" label="COM_IDENTITYPROOF_ADMINISTRATOR" description="COM_IDENTITYPROOF_FIELD_ADMINISTRATOR_DESC" />
     </fieldset>
-    
 </config>

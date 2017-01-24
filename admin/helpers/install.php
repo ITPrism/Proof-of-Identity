@@ -83,7 +83,6 @@ class IdentityproofInstallHelper
         if (true !== JFolder::create($filesFolder)) {
             JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FOLDER', $filesFolder));
         } else {
-
             // Create .htaccess file.
             $htaccessFile = JPath::clean($filesFolder.'/.htaccess');
 
@@ -110,6 +109,5 @@ class IdentityproofInstallHelper
             // Set permissions.
             JPath::setPermissions($filesFolder);
         }
-
     }
 }

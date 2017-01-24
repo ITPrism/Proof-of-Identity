@@ -75,7 +75,7 @@ class pkg_identityproofInstallerScript
         }
 
         // Register Component helpers
-        JLoader::register('IdentityproofInstallHelper', IDENTITYPROOF_PATH_COMPONENT_ADMINISTRATOR . DIRECTORY_SEPARATOR . 'helpers' . DIRECTORY_SEPARATOR . 'install.php');
+        JLoader::register('IdentityproofInstallHelper', IDENTITYPROOF_PATH_COMPONENT_ADMINISTRATOR . '/helpers/install.php');
 
         // Create keys folder.
 
@@ -91,7 +91,6 @@ class pkg_identityproofInstallerScript
 
             $filesFolder = JPath::clean(JPATH_ROOT .'/'. $folder, '/');
             IdentityproofInstallHelper::createFolder($filesFolder);
-
         } else {
             $filesFolder = JPath::clean($params->get('files_path'), '/');
         }
