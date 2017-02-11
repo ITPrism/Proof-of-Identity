@@ -3,8 +3,8 @@
  * @package      ProofOfIdentity
  * @subpackage   Version
  * @author       Todor Iliev
- * @copyright    Copyright (C) 2015 Todor Iliev <todor@itprism.com>. All rights reserved.
- * @license      http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ * @copyright    Copyright (C) 2017 Todor Iliev <todor@itprism.com>. All rights reserved.
+ * @license      GNU General Public License version 3 or later; see LICENSE.txt
  */
 
 namespace Identityproof;
@@ -38,7 +38,7 @@ class Version
      *
      * @var integer
      */
-    public $devLevel = '3.1';
+    public $devLevel = '3.2';
 
     /**
      * Release Type
@@ -59,7 +59,7 @@ class Version
      *
      * @var string
      */
-    public $releaseDate = '24 January, 2017';
+    public $releaseDate = '11 February, 2017';
 
     /**
      * License

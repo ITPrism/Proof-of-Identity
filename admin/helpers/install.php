@@ -80,15 +80,14 @@ class IdentityproofInstallHelper
 
     public static function createFolder($filesFolder)
     {
-        if (true !== JFolder::create($filesFolder)) {
+        if (!JFolder::create($filesFolder)) {
             JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FOLDER', $filesFolder));
         } else {
             // Create .htaccess file.
             $htaccessFile = JPath::clean($filesFolder.'/.htaccess');
+            $content      = '## Restricted for all requests.\nDeny from all';
 
-            $content = '## Restricted for all requests.\nDeny from all';
-
-            if (true !== JFile::write($htaccessFile, $content)) {
+            if (!JFile::write($htaccessFile, $content)) {
                 JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CANNOT_CREATE_FILE', $htaccessFile));
             }
 
@@ -97,10 +96,9 @@ class IdentityproofInstallHelper
             if (!JFile::exists($configFile)) {
                 JLog::add(JText::sprintf('COM_IDENTITYPROOF_ERROR_CONFIG_NOT_EXISTS', $configFile));
             } else {
-                $content = file_get_contents($configFile);
-                $content = str_replace('{FILES_PATH}', $filesFolder, $content);
-
-                file_put_contents($configFile, $content);
+                $config  = simplexml_load_file($configFile);
+                $config->fieldset[0]->field[0]['default'] = $filesFolder;
+                $config->asXML($configFile);
 
                 // Set permissions for config.xml
                 JPath::setPermissions($configFile);

@@ -1,6 +1,9 @@
 Proof Of Identity Changelog
 ===============================
 
+###v2.3.2
+* Fixed folder creation during the process of installation.
+
 ###v2.3.1
 * Fixed files path creation during the process of installation.
 

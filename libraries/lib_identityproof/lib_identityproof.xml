@@ -9,8 +9,8 @@
 	<license>http://www.gnu.org/licenses/gpl-3.0.en.html GNU/GPLv3</license>
 	<packager>ITPrism</packager>
 	<packagerurl>http://itprism.com</packagerurl>
-	<version>2.3.1</version>
-	<creationDate>24 January, 2017</creationDate>
+	<version>2.3.2</version>
+	<creationDate>11 February, 2017</creationDate>
 	<description>Proof of Identity Library</description>
 	
 	<files>

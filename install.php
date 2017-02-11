@@ -66,6 +66,8 @@ class pkg_identityproofInstallerScript
      * @param $type
      * @param $parent
      *
+     * @throws \UnexpectedValueException
+     *
      * @return void
      */
     public function postflight($type, $parent)
@@ -77,8 +79,6 @@ class pkg_identityproofInstallerScript
         // Register Component helpers
         JLoader::register('IdentityproofInstallHelper', IDENTITYPROOF_PATH_COMPONENT_ADMINISTRATOR . '/helpers/install.php');
 
-        // Create keys folder.
-
         // Create folder if it does not exist.
         $params = JComponentHelper::getParams('com_identityproof');
         /** @var  $params Joomla\Registry\Registry */
@@ -86,10 +86,10 @@ class pkg_identityproofInstallerScript
         jimport('Prism.init');
         jimport('Identityproof.init');
 
-        if (!$params->get('files_path')) {
-            $folder = IdentityproofInstallHelper::generateFolderName();
-
+        if (!$params->get('files_path') or strcmp('{FILES_PATH}', $params->get('files_path')) === 0) {
+            $folder      = IdentityproofInstallHelper::generateFolderName();
             $filesFolder = JPath::clean(JPATH_ROOT .'/'. $folder, '/');
+
             IdentityproofInstallHelper::createFolder($filesFolder);
         } else {
             $filesFolder = JPath::clean($params->get('files_path'), '/');
